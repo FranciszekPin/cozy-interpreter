@@ -1,0 +1,18 @@
+instrukcja:
+	instrukcja-wyrażeniowa
+	instrukcja-złożona
+	instrukcja-wyboru
+	instrukcja-powtarzania
+instrukcja-wyrażeniowa:
+	wyrażenie_opc;
+instrukcja-złożona:
+	begin lista-elementów-bloku end
+lista-elementów-bloku:
+	instrukcja
+	lista-elementów-bloku instrukcja
+instrukcja-wyboru:
+	if wyrażenie then instrukcja
+	if wyrażenie then instrukcja ele instrukcja
+instrukcja-powtarzania:
+	while wyrażenie repeat
+
