@@ -1,6 +1,5 @@
 #include "evaluation.h"
 #include <ctype.h>
-#include <stdbool.h>
 #include <stdio.h>
 
 char * readNumber(char *expression, int* number) {
@@ -29,6 +28,21 @@ char * readNumber(char *expression, int* number) {
     return expression;
 }
 
+bool check_if_brackets_are_correct(char *expression) {
+    int number_of_opening_brackets = 0;
+    int number_of_closing_brackets = 0;
+
+    while (*expression != '\0') {
+        char act = *expression;
+
+        if (act == '(')
+            number_of_opening_brackets++;
+        else if (act == ')')
+            number_of_closing_brackets++;
+    }
+
+    return number_of_opening_brackets == number_of_closing_brackets;
+}
 
 char *find_first_operation(char *expression) {
     int number_of_opening_brackets = 0;
