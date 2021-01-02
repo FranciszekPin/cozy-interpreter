@@ -28,7 +28,7 @@ char * readNumber(char *expression, int* number) {
     return expression;
 }
 
-bool check_if_brackets_are_correct(char *expression) {
+bool brackets_are_correct(char *expression) {
     int number_of_opening_brackets = 0;
     int number_of_closing_brackets = 0;
 
@@ -37,8 +37,12 @@ bool check_if_brackets_are_correct(char *expression) {
 
         if (act == '(')
             number_of_opening_brackets++;
-        else if (act == ')')
+        else if (act == ')') {
             number_of_closing_brackets++;
+            if (number_of_closing_brackets > number_of_opening_brackets)
+                return false;
+        }
+        expression++;
     }
 
     return number_of_opening_brackets == number_of_closing_brackets;
