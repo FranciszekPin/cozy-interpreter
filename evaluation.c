@@ -1,6 +1,7 @@
 #include "evaluation.h"
 #include <ctype.h>
 #include <stdio.h>
+#include <string.h>
 
 char * readNumber(char *expression, int* number) {
     int read_number = 0;
@@ -46,6 +47,25 @@ bool brackets_are_correct(char *expression) {
     }
 
     return number_of_opening_brackets == number_of_closing_brackets;
+}
+
+bool remove_unnecessary_brackets(char *expression) {
+    char copy[100];
+    strcpy(copy, expression);
+    char *test_expression = expression+1;
+    int i = 0;
+    while (expression[i+1] != '\0')
+        i++;
+
+    test_expression[i-1] = '\0';
+
+    if (!brackets_are_correct(test_expression)) {
+        strcpy(expression, copy);
+        return false;
+    } else {
+        strcpy(expression, test_expression);
+        return true;
+    }
 }
 
 char *find_first_operation(char *expression) {
