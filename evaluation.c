@@ -50,22 +50,25 @@ bool brackets_are_correct(char *expression) {
 }
 
 bool remove_unnecessary_brackets(char *expression) {
-    char copy[100];
-    strcpy(copy, expression);
-    char *test_expression = expression+1;
-    int i = 0;
-    while (expression[i+1] != '\0')
-        i++;
+    if (*expression == '(') {
+        char copy[100];
+        strcpy(copy, expression);
+        char *test_expression = expression + 1;
+        int i = 0;
+        while (expression[i + 1] != '\0')
+            i++;
 
-    test_expression[i-1] = '\0';
+        test_expression[i - 1] = '\0';
 
-    if (!brackets_are_correct(test_expression)) {
-        strcpy(expression, copy);
-        return false;
-    } else {
-        strcpy(expression, test_expression);
-        return true;
+        if (!brackets_are_correct(test_expression)) {
+            strcpy(expression, copy);
+            return false;
+        } else {
+            strcpy(expression, test_expression);
+            return true;
+        }
     }
+    return false;
 }
 
 char *find_first_operation(char *expression) {
