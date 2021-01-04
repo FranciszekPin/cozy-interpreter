@@ -5,6 +5,7 @@ typedef enum op {
     ADD,
     SUBTRACT,
     MULTIPLY,
+    DIVIDE,
     ASSIGN,
     NOT_DEFINED
 } Operation;
