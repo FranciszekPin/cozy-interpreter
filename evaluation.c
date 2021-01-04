@@ -2,6 +2,7 @@
 #include <ctype.h>
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 
 char * readNumber(char *expression, int* number) {
     int read_number = 0;
@@ -108,6 +109,55 @@ char *find_first_operation(char *expression) {
 
         expression++;
     }
+
+    return result;
+}
+
+Operation choose_proper_operation(char operator) {
+    Operation result = NOT_DEFINED;
+    switch (operator) {
+        case '*': result = MULTIPLY; break;
+        case '+': result = ADD; break;
+        case '/': result = DIVIDE; break;
+        case '-': result = SUBTRACT; break;
+        default: result = NOT_DEFINED;
+    }
+
+    return result;
+}
+
+void copy_string(char *dest, char* begin, char *end) {
+    int i=0;
+    while (begin != end && *begin != '\0') {
+        dest[i] = *begin;
+        begin++;
+        i++;
+    }
+
+    dest[i] = '\0';
+}
+
+tree_node * parse(char *expression) {
+    remove_unnecessary_brackets(expression);
+
+    tree_node *result;
+    char *first_operation = find_first_operation(expression);
+    if (first_operation != NULL) {
+        Operation act_operation = choose_proper_operation(*first_operation);
+
+        create_new_node_operation(&result, act_operation);
+
+        char left[100];
+        char right[100];
+
+        copy_string(left, expression, first_operation);
+        copy_string(right, first_operation+1, NULL);
+
+        result->left = parse(left);
+        result->right = parse(right);
+    }
+    else
+        create_new_node_value(&result, expression);
 
     return result;
 }
