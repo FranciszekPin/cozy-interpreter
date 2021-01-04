@@ -11,13 +11,13 @@ typedef enum op {
 
 typedef struct node {
     Operation operation;
-    int value;
+    char value[100];
 
     struct node* left;
     struct node* right;
 } tree_node;
 
 void create_new_node_operation(tree_node **node_ptr, Operation operation);
-void create_new_node_value(tree_node **node_ptr, int value);
+void create_new_node_value(tree_node **node_ptr, char* value);
 
 #endif //COZY_INTERPRETER_BINARY_TREE_H
