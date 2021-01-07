@@ -2,6 +2,7 @@
 #include "../constants.h"
 #include "test_evaluation.h"
 #include <stdio.h>
+#include <stdlib.h>
 
 int main(int argc, char **argv) {
     int exit_val = 1;
@@ -20,6 +21,10 @@ int main(int argc, char **argv) {
     strcpy(value_to_check, argv[argc-1]);
     if (strcmp(function_name, "remove_unnecessary_brackets") == 0) {
         if (test_if_equal_remove_unnecessary_brackets(function_arguments[0], value_to_check))
+            exit_val = 0;
+    }
+    if (strcmp(function_name, "brackets_are_correct") == 0) {
+        if (test_if_equal_brackets_are_correct(function_arguments[0], atoi(value_to_check)))
             exit_val = 0;
     }
     return exit_val;
