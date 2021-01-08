@@ -1,5 +1,5 @@
 #include <string.h>
-#include "../evaluation.h"
+#include "../src/evaluation.h"
 
 bool test_if_equal_remove_unnecessary_brackets(char *argument, char *expected_value) {
     remove_unnecessary_brackets(argument);

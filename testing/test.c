@@ -1,5 +1,5 @@
 #include <string.h>
-#include "../constants.h"
+#include "../src/constants.h"
 #include "test_evaluation.h"
 #include <stdio.h>
 #include <stdlib.h>
