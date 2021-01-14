@@ -1,6 +1,8 @@
 #ifndef COZY_INTERPRETER_BINARY_TREE_H
 #define COZY_INTERPRETER_BINARY_TREE_H
 
+#include "constants.h"
+
 typedef enum op {
     ADD,
     SUBTRACT,
@@ -12,7 +14,7 @@ typedef enum op {
 
 typedef struct node {
     Operation operation;
-    char value[100];
+    char value[LINE_LENGTH];
 
     struct node* left;
     struct node* right;
