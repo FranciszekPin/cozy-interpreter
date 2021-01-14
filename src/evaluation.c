@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include "stack.h"
 
 char * readNumber(char *expression, int* number) {
     int read_number = 0;
@@ -160,4 +161,103 @@ tree_node * parse(char *expression) {
         create_new_node_value(&result, expression);
 
     return result;
+}
+
+char *skip_whitespace(char *source) {
+    while (*source != '\0' && isspace(*source)) {
+        source++;
+    }
+
+    return source;
+}
+
+char * read_word(char *source, char *word) {
+    source = skip_whitespace(source);
+
+    while (*source != '\0' && !isspace(*source)) {
+        *word = *source;
+        source++, word++;
+    }
+
+    *word = '\0';
+
+    return source;
+}
+
+bool is_bracket(char c) {
+    return (c == '(') || (c == ')');
+}
+
+int get_operator_priority(char operator) {
+    int result;
+
+    switch (operator) {
+        case '*':
+            result = 10;
+            break;
+        case '+':
+            result = 9;
+            break;
+        default:
+            result = -1;
+            break;
+    }
+}
+
+bool equal(char *string_a, char *string_b) {
+    return strcmp(string_a, string_b) == 0;
+}
+
+bool is_operator(char operator) {
+    return operator == '+' || operator == '*';
+}
+
+void expression_to_ONP(char *expression, char *ONP) {
+    stack_t stack = create_stack();
+
+    while (*expression != '\0') {
+        expression = skip_whitespace(expression);
+        if (isdigit(*expression)) {
+            printf("%c", *expression);
+            expression++;
+        }
+        else if (is_operator(*expression)) {
+            while (!is_empty(stack) && is_operator(get_top(stack).word[0])) {
+                stack_val_t act_val;
+                stack = pop(stack, &act_val);
+                printf("%s", act_val.word);
+            }
+
+            stack_val_t value_to_push;
+            char operator_to_add[LINE_LENGTH];
+            operator_to_add[0] = *expression;
+            strcpy(value_to_push.word, operator_to_add);
+            stack = push(stack, value_to_push);
+
+            expression++;
+        }
+        else if (is_bracket(*expression)) {
+            if (*expression == '(') {
+                stack_val_t value_to_push;
+                strcpy(value_to_push.word, "(");
+                stack = push(stack, value_to_push);
+            }
+            else {
+                stack_val_t act_val;
+                do {
+                    stack = pop(stack, &act_val);
+                    if (!equal(act_val.word, "(")) {
+                        printf("%s", act_val.word);
+                    }
+                } while (!equal(act_val.word, "("));
+            }
+
+            expression++;
+        }
+    }
+
+    while (!is_empty(stack)) {
+        stack_val_t act_val;
+        stack = pop(stack, &act_val);
+    }
 }
