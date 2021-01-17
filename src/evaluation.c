@@ -266,50 +266,47 @@ int copy_on_position(char *destination, char *source, size_t index) {
 
 void expression_to_ONP(char *expression, char *ONP) {
     stack_t stack = create_stack();
+    char lexical_unit[LINE_LENGTH];
+    lexical_unit_t type_of_lexical_unit = NOT_A_LEXICAL_UNIT;
+    size_t index_of_ONP = 0;
 
-    while (*expression != '\0') {
-        expression = skip_whitespace(expression);
-        if (isdigit(*expression)) {
-            printf("%c", *expression);
-            expression++;
-        }
-        else if (is_operator(*expression)) {
-            while (!is_empty(stack) && is_operator(get_top(stack).word[0])) {
-                stack_val_t act_val;
-                stack = pop(stack, &act_val);
-                printf("%s", act_val.word);
+    while (!end_of_string(expression)) {
+        expression = read_lexical_unit(expression, lexical_unit);
+        type_of_lexical_unit = detect_to_which_lexical_unit_character_belongs(*lexical_unit);
+        if (type_of_lexical_unit == NUMBER)
+            index_of_ONP = copy_on_position(ONP, lexical_unit, index_of_ONP);
+
+        else if (type_of_lexical_unit == OPERATOR) {
+            while (!is_empty(stack) && is_operator(get_top(stack)[0])) {
+                char act_val[LINE_LENGTH];
+                stack = pop(stack, act_val);
+                index_of_ONP = copy_on_position(ONP, act_val, index_of_ONP);
+            }
+            stack = push(stack, lexical_unit);
+
+        } else if (type_of_lexical_unit == OPENING_BRACKET) {
+            stack = push(stack, "(");
+        } else if (type_of_lexical_unit == CLOSING_BRACKET) {
+            char act_val[LINE_LENGTH];
+
+
+            while (!is_empty(stack) && !equal(get_top(stack), "(")) {
+                stack = pop(stack, act_val);
+                index_of_ONP = copy_on_position(ONP, act_val, index_of_ONP);
             }
 
-            stack_val_t value_to_push;
-            char operator_to_add[LINE_LENGTH];
-            operator_to_add[0] = *expression;
-            strcpy(value_to_push.word, operator_to_add);
-            stack = push(stack, value_to_push);
-
-            expression++;
-        }
-        else if (is_bracket(*expression)) {
-            if (*expression == '(') {
-                stack_val_t value_to_push;
-                strcpy(value_to_push.word, "(");
-                stack = push(stack, value_to_push);
-            }
-            else {
-                stack_val_t act_val;
-                do {
-                    stack = pop(stack, &act_val);
-                    if (!equal(act_val.word, "(")) {
-                        printf("%s", act_val.word);
-                    }
-                } while (!equal(act_val.word, "("));
-            }
-
-            expression++;
+        } else {
+            printf("error in expression!!\n");
         }
     }
 
     while (!is_empty(stack)) {
-        stack_val_t act_val;
-        stack = pop(stack, &act_val);
+        char act_val[LINE_LENGTH];
+
+        stack = pop(stack, act_val);
+        *ONP = act_val[0];
+        ONP++;
     }
+
+    *ONP = '\0';
 }
