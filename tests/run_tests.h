@@ -1,0 +1,6 @@
+#ifndef COZY_INTERPRETER_RUN_TESTS_H
+#define COZY_INTERPRETER_RUN_TESTS_H
+
+void run_tests();
+
+#endif //COZY_INTERPRETER_RUN_TESTS_H
