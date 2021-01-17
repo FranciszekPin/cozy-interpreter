@@ -212,6 +212,58 @@ bool is_operator(char operator) {
     return operator == '+' || operator == '*';
 }
 
+lexical_unit_t detect_to_which_lexical_unit_character_belongs(char c) {
+    if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z'))
+        return VARIABLE;
+
+    if (c >= '0' && c <= '9')
+        return NUMBER;
+
+    if (get_operator_priority(c) != -1)
+        return OPERATOR;
+
+    if (c == '(')
+        return OPENING_BRACKET;
+
+    if (c == ')')
+        return CLOSING_BRACKET;
+
+    return NOT_A_LEXICAL_UNIT;
+}
+
+char *read_lexical_unit(char *source, char *word) {
+    source = skip_whitespace(source);
+
+    lexical_unit_t act_lexical_unit = detect_to_which_lexical_unit_character_belongs(*source);
+
+    if (act_lexical_unit == VARIABLE || act_lexical_unit == NUMBER) {
+        while (*source != '\0' && detect_to_which_lexical_unit_character_belongs(*source) == act_lexical_unit) {
+            *word = *source;
+            source++, word++;
+        }
+    } else {
+        *word = *source;
+        source++, word++;
+    }
+
+    *word = '\0';
+
+    return source;
+}
+
+bool end_of_string(const char *string) {
+    return *string == '\0';
+}
+
+int copy_on_position(char *destination, char *source, size_t index) {
+    while (!end_of_string(source)) {
+        *(destination + index) = *source;
+        index++;
+    }
+
+    return index;
+}
+
 void expression_to_ONP(char *expression, char *ONP) {
     stack_t stack = create_stack();
 
