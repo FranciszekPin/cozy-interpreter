@@ -31,10 +31,17 @@ void test_evaluation() {
     test_end_of_string("", true);
     test_end_of_string("\0ala ma kota", true);
 
-    test_expression_to_ONP("(2+3)*5", "23+5*");
-    test_expression_to_ONP("2+(3*5)", "235*+");
-    test_expression_to_ONP("(2+2)*(3*5)", "22+35**");
-    test_expression_to_ONP("(((2+(3*5))))", "235*+");
+    test_expression_to_ONP("2", "2");
+    test_expression_to_ONP("", "");
+    test_expression_to_ONP("256", "256");
+    test_expression_to_ONP("abcd", "abcd");
+    test_expression_to_ONP("abcd+16", "abcd 16 +");
+    test_expression_to_ONP("abcd+(16*6)", "abcd 16 6 * +");
+    test_expression_to_ONP("((i+someVar)*(16*6)+37)*another", "i someVar + 16 6 * * 37 + another *");
+    test_expression_to_ONP("  (  (  i+someVar)   *(16   *6)+   37  )  *another  ", "i someVar + 16 6 * * 37 + another *");
+    test_expression_to_ONP("2+(3*5)", "2 3 5 * +");
+    test_expression_to_ONP("(2+2)*(3*5)", "2 2 + 3 5 * *");
+    test_expression_to_ONP("(((2+(3*5))))", "2 3 5 * +");
 
 }
 
