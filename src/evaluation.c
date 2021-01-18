@@ -273,7 +273,7 @@ void expression_to_ONP(char *expression, char *ONP) {
     while (!end_of_string(expression)) {
         expression = read_lexical_unit(expression, lexical_unit);
         type_of_lexical_unit = detect_to_which_lexical_unit_character_belongs(*lexical_unit);
-        if (type_of_lexical_unit == NUMBER)
+        if (type_of_lexical_unit == NUMBER || type_of_lexical_unit == VARIABLE)
             index_of_ONP = copy_on_position(ONP, lexical_unit, index_of_ONP);
 
         else if (type_of_lexical_unit == OPERATOR) {
