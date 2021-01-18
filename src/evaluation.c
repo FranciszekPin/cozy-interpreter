@@ -304,9 +304,8 @@ void expression_to_ONP(char *expression, char *ONP) {
         char act_val[LINE_LENGTH];
 
         stack = pop(stack, act_val);
-        *ONP = act_val[0];
-        ONP++;
+        index_of_ONP = copy_on_position(ONP, act_val, index_of_ONP);
     }
 
-    *ONP = '\0';
+    *(ONP+index_of_ONP) = '\0';
 }
