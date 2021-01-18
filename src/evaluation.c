@@ -255,11 +255,15 @@ bool end_of_string(const char *string) {
     return *string == '\0';
 }
 
-int copy_on_position(char *destination, char *source, size_t index) {
+int insert_new_lexical_unit_to_ONP(char *destination, char *source, size_t index) {
     while (!end_of_string(source)) {
         *(destination + index) = *source;
+        source++;
         index++;
     }
+
+    *(destination + index) = ONP_SEPARATOR;
+    index++;
 
     return index;
 }
@@ -273,14 +277,15 @@ void expression_to_ONP(char *expression, char *ONP) {
     while (!end_of_string(expression)) {
         expression = read_lexical_unit(expression, lexical_unit);
         type_of_lexical_unit = detect_to_which_lexical_unit_character_belongs(*lexical_unit);
+
         if (type_of_lexical_unit == NUMBER || type_of_lexical_unit == VARIABLE)
-            index_of_ONP = copy_on_position(ONP, lexical_unit, index_of_ONP);
+            index_of_ONP = insert_new_lexical_unit_to_ONP(ONP, lexical_unit, index_of_ONP);
 
         else if (type_of_lexical_unit == OPERATOR) {
             while (!is_empty(stack) && is_operator(get_top(stack)[0])) {
                 char act_val[LINE_LENGTH];
                 stack = pop(stack, act_val);
-                index_of_ONP = copy_on_position(ONP, act_val, index_of_ONP);
+                index_of_ONP = insert_new_lexical_unit_to_ONP(ONP, act_val, index_of_ONP);
             }
             stack = push(stack, lexical_unit);
 
@@ -292,8 +297,10 @@ void expression_to_ONP(char *expression, char *ONP) {
 
             while (!is_empty(stack) && !equal(get_top(stack), "(")) {
                 stack = pop(stack, act_val);
-                index_of_ONP = copy_on_position(ONP, act_val, index_of_ONP);
+                index_of_ONP = insert_new_lexical_unit_to_ONP(ONP, act_val, index_of_ONP);
             }
+
+            stack = pop(stack, act_val);
 
         } else {
             printf("error in expression!!\n");
@@ -304,8 +311,10 @@ void expression_to_ONP(char *expression, char *ONP) {
         char act_val[LINE_LENGTH];
 
         stack = pop(stack, act_val);
-        index_of_ONP = copy_on_position(ONP, act_val, index_of_ONP);
+        if (detect_to_which_lexical_unit_character_belongs(*act_val) != OPENING_BRACKET)
+        index_of_ONP = insert_new_lexical_unit_to_ONP(ONP, act_val, index_of_ONP);
     }
 
-    *(ONP+index_of_ONP) = '\0';
+    if (index_of_ONP > 0)
+        *(ONP+index_of_ONP-1) = '\0';
 }
