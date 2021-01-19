@@ -188,20 +188,23 @@ bool is_bracket(char c) {
     return (c == '(') || (c == ')');
 }
 
-int get_operator_priority(char operator) {
-    int result;
+int get_operator_priority(char *operator) {
+    int result = -1;
 
-    switch (operator) {
-        case '*':
-            result = 10;
-            break;
-        case '+':
-            result = 9;
-            break;
-        default:
-            result = -1;
-            break;
-    }
+    if (strcmp(operator, "*") == 0 || strcmp(operator, "/") == 0  || strcmp(operator, "%") == 0)
+        result = 10;
+    else if (strcmp(operator, "+") == 0 || strcmp(operator, "-") == 0)
+        result = 9;
+    else if (strcmp(operator, ">") == 0 || strcmp(operator, ">=") == 0  || strcmp(operator, "<") == 0 || strcmp(operator, "<=") == 0)
+        result = 8;
+    else if (strcmp(operator, "==") == 0 || strcmp(operator, "!=") == 0)
+        result = 7;
+    else if (strcmp(operator, "&&") == 0 )
+        result = 6;
+    else if (strcmp(operator, "||") == 0 )
+        result = 5;
+
+    return result;
 }
 
 bool equal(char *string_a, char *string_b) {
