@@ -7,7 +7,7 @@ void test_evaluation();
 
 void test_expression_to_ONP(char *expression, char *expected_val);
 
-void test_detect_to_which_lexical_unit_character_belongs(char c, lexical_unit_t expected_val);
+void test_get_lexical_unit_type(char *lexical_unit, lexical_unit_t expected_val);
 
 void test_skip_whitespace(char *expression, char *expected_val);
 
