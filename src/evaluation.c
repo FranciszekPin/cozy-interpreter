@@ -279,13 +279,13 @@ void expression_to_ONP(char *expression, char *ONP) {
 
     while (!end_of_string(expression)) {
         expression = read_lexical_unit(expression, lexical_unit);
-        type_of_lexical_unit = detect_to_which_lexical_unit_character_belongs(*lexical_unit);
+        type_of_lexical_unit = detect_to_which_lexical_unit_string_belongs(lexical_unit);
 
         if (type_of_lexical_unit == NUMBER || type_of_lexical_unit == VARIABLE)
             index_of_ONP = insert_new_lexical_unit_to_ONP(ONP, lexical_unit, index_of_ONP);
 
         else if (type_of_lexical_unit == OPERATOR) {
-            while (!is_empty(stack) && is_operator(get_top(stack)[0])) {
+            while (!is_empty(stack) && get_operator_priority(get_top(stack)) >= get_operator_priority(lexical_unit)) {
                 char act_val[LINE_LENGTH];
                 stack = pop(stack, act_val);
                 index_of_ONP = insert_new_lexical_unit_to_ONP(ONP, act_val, index_of_ONP);
@@ -314,10 +314,12 @@ void expression_to_ONP(char *expression, char *ONP) {
         char act_val[LINE_LENGTH];
 
         stack = pop(stack, act_val);
-        if (detect_to_which_lexical_unit_character_belongs(*act_val) != OPENING_BRACKET)
-        index_of_ONP = insert_new_lexical_unit_to_ONP(ONP, act_val, index_of_ONP);
+        if (detect_to_which_lexical_unit_string_belongs(act_val) != OPENING_BRACKET)
+            index_of_ONP = insert_new_lexical_unit_to_ONP(ONP, act_val, index_of_ONP);
     }
 
     if (index_of_ONP > 0)
-        *(ONP+index_of_ONP-1) = '\0';
+        *(ONP + index_of_ONP - 1) = '\0';
+    else
+        *ONP = '\0';
 }
