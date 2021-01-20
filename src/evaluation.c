@@ -191,17 +191,18 @@ bool is_bracket(char c) {
 int get_operator_priority(char *operator) {
     int result = -1;
 
-    if (strcmp(operator, "*") == 0 || strcmp(operator, "/") == 0  || strcmp(operator, "%") == 0)
+    if (strcmp(operator, "*") == 0 || strcmp(operator, "/") == 0 || strcmp(operator, "%") == 0)
         result = 10;
     else if (strcmp(operator, "+") == 0 || strcmp(operator, "-") == 0)
         result = 9;
-    else if (strcmp(operator, ">") == 0 || strcmp(operator, ">=") == 0  || strcmp(operator, "<") == 0 || strcmp(operator, "<=") == 0)
+    else if (strcmp(operator, ">") == 0 || strcmp(operator, ">=") == 0 || strcmp(operator, "<") == 0 ||
+             strcmp(operator, "<=") == 0)
         result = 8;
     else if (strcmp(operator, "==") == 0 || strcmp(operator, "!=") == 0)
         result = 7;
-    else if (strcmp(operator, "&&") == 0 )
+    else if (strcmp(operator, "&&") == 0)
         result = 6;
-    else if (strcmp(operator, "||") == 0 )
+    else if (strcmp(operator, "||") == 0)
         result = 5;
 
     return result;
@@ -215,20 +216,23 @@ bool is_operator(char operator) {
     return operator == '+' || operator == '*';
 }
 
-lexical_unit_t detect_to_which_lexical_unit_character_belongs(char c) {
-    if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z'))
+lexical_unit_t detect_to_which_lexical_unit_string_belongs(char *lexical_unit) {
+    char first_character = *lexical_unit;
+    if ((first_character >= 'a' && first_character <= 'z') || (first_character >= 'A' && first_character <= 'Z'))
         return VARIABLE;
 
-    if (c >= '0' && c <= '9')
+    if (first_character >= '0' && first_character <= '9')
         return NUMBER;
 
-    if (get_operator_priority(c) != -1)
+    if (first_character == '=' || first_character == '<' || first_character == '>' || first_character == '!' ||
+        first_character == '+' || first_character == '-' || first_character == '*' || first_character == '/' ||
+        first_character == '|' || first_character == '&')
         return OPERATOR;
 
-    if (c == '(')
+    if (first_character == '(')
         return OPENING_BRACKET;
 
-    if (c == ')')
+    if (first_character == ')')
         return CLOSING_BRACKET;
 
     return NOT_A_LEXICAL_UNIT;
@@ -237,10 +241,10 @@ lexical_unit_t detect_to_which_lexical_unit_character_belongs(char c) {
 char *read_lexical_unit(char *source, char *word) {
     source = skip_whitespace(source);
 
-    lexical_unit_t act_lexical_unit = detect_to_which_lexical_unit_character_belongs(*source);
+    lexical_unit_t act_lexical_unit = detect_to_which_lexical_unit_string_belongs(source);
 
-    if (act_lexical_unit == VARIABLE || act_lexical_unit == NUMBER) {
-        while (*source != '\0' && detect_to_which_lexical_unit_character_belongs(*source) == act_lexical_unit) {
+    if (act_lexical_unit == VARIABLE || act_lexical_unit == NUMBER || act_lexical_unit == OPERATOR) {
+        while (*source != '\0' && detect_to_which_lexical_unit_string_belongs(source) == act_lexical_unit) {
             *word = *source;
             source++, word++;
         }
@@ -248,6 +252,8 @@ char *read_lexical_unit(char *source, char *word) {
         *word = *source;
         source++, word++;
     }
+
+    source = skip_whitespace(source);
 
     *word = '\0';
 
