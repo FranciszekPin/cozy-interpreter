@@ -13,14 +13,10 @@ typedef enum {
     NOT_A_LEXICAL_UNIT
 } lexical_unit_t;
 
-tree_node * parse(char *expression);
-void remove_character_from_end(char *expression);
-void remove_unnecessary_brackets(char *expression);
-bool brackets_are_correct(char *expression);
 char *skip_whitespace(char *source);
 char * read_lexical_unit(char *source, char *word);
 void expression_to_ONP(char *expression, char *ONP);
 bool end_of_string(const char *string);
-lexical_unit_t detect_to_which_lexical_unit_character_belongs(char c);
+lexical_unit_t detect_to_which_lexical_unit_string_belongs(char *lexical_unit);
 
 #endif //COZY_INTERPRETER_EVALUATION_H
