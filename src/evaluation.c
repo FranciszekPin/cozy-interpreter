@@ -139,6 +139,23 @@ int insert_new_lexical_unit_to_ONP(char *destination, char *source, size_t index
     return index;
 }
 
+void convert_expression_to_separated_form(char *destination, char *expression) {
+    char lexical_unit[LINE_LENGTH];
+    size_t index_of_destination = 0;
+    while(!end_of_string(expression))
+    {
+        expression = read_lexical_unit(expression, lexical_unit);
+        index_of_destination = insert_new_lexical_unit_to_string(destination, lexical_unit, index_of_destination);
+    }
+
+    if (index_of_destination > 0) {
+        *(destination+index_of_destination-1) = '\0';
+    }
+    else {
+        *destination = '\0';
+    }
+}
+
 
 void expression_to_ONP(char *expression, char *ONP) {
     stack_t stack = create_stack();
