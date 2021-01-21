@@ -1,0 +1,21 @@
+//
+// Created by learning-account on 20.01.2021.
+//
+
+#ifndef COZY_INTERPRETER_ERROR_MANAGER_H
+#define COZY_INTERPRETER_ERROR_MANAGER_H
+
+typedef enum {
+    INCORRECT_BRACKETS,
+    WRONG_OPERATOR_USAGE,
+    NUMBER_AFTER_NUMBER,
+    VARIABLE_AFTER_VARIABLE,
+    ILLEGAL_CHARACTER_USAGE,
+    ILLEGAL_EXPRESSION_FORM,
+    NO_ERROR
+} error_t;
+
+void throw_error(error_t error_type);
+
+
+#endif //COZY_INTERPRETER_ERROR_MANAGER_H
