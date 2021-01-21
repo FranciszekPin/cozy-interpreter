@@ -2,7 +2,6 @@
 #include <ctype.h>
 #include <stdio.h>
 #include <string.h>
-#include <stdlib.h>
 #include "stack.h"
 #include "error_manager.h"
 
@@ -60,6 +59,8 @@ int get_operator_priority(char *operator) {
         result = 6;
     else if (strcmp(operator, "||") == 0)
         result = 5;
+    else
+        result = -1;
 
     return result;
 }
@@ -108,9 +109,12 @@ char *read_lexical_unit(char *source, char *word) {
             *word = *source;
             source++, word++;
         }
-    } else {
+    } else if (act_lexical_unit == OPENING_BRACKET || act_lexical_unit == CLOSING_BRACKET) {
         *word = *source;
         source++, word++;
+    } else {
+        source++;
+        throw_error(ILLEGAL_CHARACTER_USAGE);
     }
 
     source = skip_whitespace(source);
@@ -126,7 +130,7 @@ bool end_of_string(const char *string) {
 }
 
 
-int insert_new_lexical_unit_to_ONP(char *destination, char *source, size_t index) {
+int insert_new_lexical_unit_to_string(char *destination, char *source, size_t index) {
     while (!end_of_string(source)) {
         *(destination + index) = *source;
         source++;
@@ -142,16 +146,14 @@ int insert_new_lexical_unit_to_ONP(char *destination, char *source, size_t index
 void convert_expression_to_separated_form(char *destination, char *expression) {
     char lexical_unit[LINE_LENGTH];
     size_t index_of_destination = 0;
-    while(!end_of_string(expression))
-    {
+    while (!end_of_string(expression)) {
         expression = read_lexical_unit(expression, lexical_unit);
         index_of_destination = insert_new_lexical_unit_to_string(destination, lexical_unit, index_of_destination);
     }
 
     if (index_of_destination > 0) {
-        *(destination+index_of_destination-1) = '\0';
-    }
-    else {
+        *(destination + index_of_destination - 1) = '\0';
+    } else {
         *destination = '\0';
     }
 }
@@ -287,24 +289,24 @@ error_t check_if_separated_form_is_correct(char *separated_form) {
 }
 
 
-void expression_to_ONP(char *expression, char *ONP) {
+void separated_form_to_ONP(char *separated_form, char *ONP) {
     stack_t stack = create_stack();
     char lexical_unit[LINE_LENGTH];
     lexical_unit_t type_of_lexical_unit = NOT_A_LEXICAL_UNIT;
     size_t index_of_ONP = 0;
 
-    while (!end_of_string(expression)) {
-        expression = read_lexical_unit(expression, lexical_unit);
+    while (!end_of_string(separated_form)) {
+        separated_form = read_from_separated_form(separated_form, lexical_unit);
         type_of_lexical_unit = detect_to_which_lexical_unit_string_belongs(lexical_unit);
 
         if (type_of_lexical_unit == NUMBER || type_of_lexical_unit == VARIABLE)
-            index_of_ONP = insert_new_lexical_unit_to_ONP(ONP, lexical_unit, index_of_ONP);
+            index_of_ONP = insert_new_lexical_unit_to_string(ONP, lexical_unit, index_of_ONP);
 
         else if (type_of_lexical_unit == OPERATOR) {
             while (!is_empty(stack) && get_operator_priority(get_top(stack)) >= get_operator_priority(lexical_unit)) {
                 char act_val[LINE_LENGTH];
                 stack = pop(stack, act_val);
-                index_of_ONP = insert_new_lexical_unit_to_ONP(ONP, act_val, index_of_ONP);
+                index_of_ONP = insert_new_lexical_unit_to_string(ONP, act_val, index_of_ONP);
             }
             stack = push(stack, lexical_unit);
 
@@ -316,13 +318,13 @@ void expression_to_ONP(char *expression, char *ONP) {
 
             while (!is_empty(stack) && !equal(get_top(stack), "(")) {
                 stack = pop(stack, act_val);
-                index_of_ONP = insert_new_lexical_unit_to_ONP(ONP, act_val, index_of_ONP);
+                index_of_ONP = insert_new_lexical_unit_to_string(ONP, act_val, index_of_ONP);
             }
 
             stack = pop(stack, act_val);
 
         } else {
-            printf("error in expression!!\n");
+            printf("error in separated_form!!\n");
         }
     }
 
@@ -331,7 +333,7 @@ void expression_to_ONP(char *expression, char *ONP) {
 
         stack = pop(stack, act_val);
         if (detect_to_which_lexical_unit_string_belongs(act_val) != OPENING_BRACKET)
-            index_of_ONP = insert_new_lexical_unit_to_ONP(ONP, act_val, index_of_ONP);
+            index_of_ONP = insert_new_lexical_unit_to_string(ONP, act_val, index_of_ONP);
     }
 
     if (index_of_ONP > 0)
