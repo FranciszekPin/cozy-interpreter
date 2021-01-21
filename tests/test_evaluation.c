@@ -21,6 +21,7 @@ void test_evaluation() {
     test_skip_whitespace(" \n  \t  some_text  ", "some_text  ");
     test_skip_whitespace(" \n  \t  some_text \n\t ", "some_text \n\t ");
 
+    test_read_lexical_unit("^^ abcd+5", "");
     test_read_lexical_unit("abcd+5", "abcd");
     test_read_lexical_unit("abcd+ajs;dlfj", "abcd");
     test_read_lexical_unit("==abcd+ajs;dlfj", "==");
@@ -34,6 +35,39 @@ void test_evaluation() {
     test_end_of_string("ala ma kota", false);
     test_end_of_string("", true);
     test_end_of_string("\0ala ma kota", true);
+
+    test_read_from_separated_form("", "");
+    test_read_from_separated_form("14 sth", "14");
+    test_read_from_separated_form("uwu sth", "uwu");
+
+    test_remaining_text_read_from_separated_form("sth goes wrong", "goes wrong");
+    test_remaining_text_read_from_separated_form("wrong", "");
+
+    test_convert_expression_to_separated_form("3+5", "3 + 5");
+    test_convert_expression_to_separated_form("((", "( (");
+    test_convert_expression_to_separated_form("3^5", "3  5");
+    test_convert_expression_to_separated_form("3+++5", "3 +++ 5");
+    test_convert_expression_to_separated_form("  <><==36 +++ \t  ( 5 var )  ", "<><== 36 +++ ( 5 var )");
+
+    test_check_if_lexical_unit_is_correct("ala", NO_ERROR);
+    test_check_if_lexical_unit_is_correct("245", NO_ERROR);
+    test_check_if_lexical_unit_is_correct("<=", NO_ERROR);
+    test_check_if_lexical_unit_is_correct(">=", NO_ERROR);
+    test_check_if_lexical_unit_is_correct("==", NO_ERROR);
+    test_check_if_lexical_unit_is_correct("!=", NO_ERROR);
+    test_check_if_lexical_unit_is_correct("<", NO_ERROR);
+    test_check_if_lexical_unit_is_correct(">", NO_ERROR);
+    test_check_if_lexical_unit_is_correct(">>", WRONG_OPERATOR_USAGE);
+    test_check_if_lexical_unit_is_correct(">>", WRONG_OPERATOR_USAGE);
+    test_check_if_lexical_unit_is_correct("&", WRONG_OPERATOR_USAGE);
+    test_check_if_lexical_unit_is_correct("$", ILLEGAL_CHARACTER_USAGE);
+
+    test_check_if_separated_form_is_correct("vara + varb", NO_ERROR);
+    test_check_if_separated_form_is_correct("vara ++ varb", WRONG_OPERATOR_USAGE);
+    test_check_if_separated_form_is_correct("( vara + varb )", NO_ERROR);
+    test_check_if_separated_form_is_correct("( vara + ) varb", ILLEGAL_EXPRESSION_FORM);
+    test_check_if_separated_form_is_correct("( vara + ) 345 varb", ILLEGAL_EXPRESSION_FORM);
+    test_check_if_separated_form_is_correct("( ( vara + 2323 ) * 345 ) == ( varb != 6 )", NO_ERROR);
 
     test_expression_to_ONP("2", "2");
     test_expression_to_ONP("", "");
@@ -72,6 +106,36 @@ void test_read_lexical_unit(char *expression, char *expected_val) {
 void test_end_of_string(char *expression, bool expected_val) {
     run_test("test end_of_string()", end_of_string(expression) == expected_val);
 }
+
+void test_read_from_separated_form(char *expression, char *expected_val) {
+    char word[LINE_LENGTH];
+    read_from_separated_form(expression, word);
+    run_test("test read_from_separated_form()", test_if_result_equals_expected(word, expected_val));
+}
+
+void test_remaining_text_read_from_separated_form(char *expression, char *expected_val) {
+    char word[LINE_LENGTH];
+    expression = read_from_separated_form(expression, word);
+    run_test("test remaining_text_read_from_separated_form()", test_if_result_equals_expected(expression, expected_val));
+}
+
+
+void test_convert_expression_to_separated_form(char *expression, char *expected_val) {
+    char separated_form[LINE_LENGTH];
+    convert_expression_to_separated_form(separated_form, expression);
+    run_test("test convert_expression_to_separated_form()", test_if_result_equals_expected(separated_form, expected_val));
+}
+
+void test_check_if_lexical_unit_is_correct(char *lexical_unit, error_t expected_val) {
+    error_t result = check_if_lexical_unit_is_correct(lexical_unit);
+    run_test("test check_if_lexical_unit_is_correct()", result == expected_val);
+}
+
+void test_check_if_separated_form_is_correct(char *separated_form, error_t expected_val) {
+    error_t result = check_if_separated_form_is_correct(separated_form);
+    run_test("test check_if_separated_form_is_correct()", result == expected_val);
+}
+
 
 void test_expression_to_ONP(char *expression, char *expected_val) {
     char ONP[LINE_LENGTH];
