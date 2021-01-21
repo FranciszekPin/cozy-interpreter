@@ -156,6 +156,136 @@ void convert_expression_to_separated_form(char *destination, char *expression) {
     }
 }
 
+char *read_from_separated_form(char *separated_form, char *word) {
+    while (*separated_form != '\0' && *separated_form != ONP_SEPARATOR) {
+        *word = *separated_form;
+        word++, separated_form++;
+    }
+
+    *word = '\0';
+    if (*separated_form == ONP_SEPARATOR)
+        separated_form++;
+
+    return separated_form;
+}
+
+error_t check_if_lexical_unit_is_correct(char *lexical_unit) {
+    lexical_unit_t type_of_lexical_unit = detect_to_which_lexical_unit_string_belongs(lexical_unit);
+
+    error_t result = NO_ERROR;
+
+    switch (type_of_lexical_unit) {
+        case NUMBER:
+        case VARIABLE:
+        case OPENING_BRACKET:
+        case CLOSING_BRACKET:
+            result = NO_ERROR;
+            break;
+        case OPERATOR: {
+            if (get_operator_priority(lexical_unit) >= 0)
+                result = NO_ERROR;
+            else
+                result = WRONG_OPERATOR_USAGE;
+        }
+            break;
+        case NOT_A_LEXICAL_UNIT:
+            result = ILLEGAL_CHARACTER_USAGE;
+            break;
+        default:
+            printf("Zly typ L_T\n");
+            break;
+    }
+
+    return result;
+}
+
+error_t check_if_separated_form_is_correct(char *separated_form) {
+    error_t result = NO_ERROR;
+
+    char prev_lexical_unit[LINE_LENGTH];
+    char act_lexical_unit[LINE_LENGTH];
+    char next_lexical_unit[LINE_LENGTH];
+
+    prev_lexical_unit[0] = '\0';
+    separated_form = read_from_separated_form(separated_form, act_lexical_unit);
+    if (!end_of_string(separated_form)) {
+        separated_form = read_from_separated_form(separated_form, next_lexical_unit);
+
+        error_t potential_error;
+        lexical_unit_t type_of_lexical_unit;
+        while (!end_of_string(act_lexical_unit)) {
+            potential_error = check_if_lexical_unit_is_correct(act_lexical_unit);
+            if (potential_error != NO_ERROR) {
+                result = potential_error;
+                break;
+            }
+
+            type_of_lexical_unit = detect_to_which_lexical_unit_string_belongs(act_lexical_unit);
+            switch (type_of_lexical_unit) {
+                case NUMBER:
+                case VARIABLE:
+                case OPERATOR: {
+                    if (*prev_lexical_unit != '\0' &&
+                        detect_to_which_lexical_unit_string_belongs(prev_lexical_unit) == type_of_lexical_unit) {
+                        result = ILLEGAL_EXPRESSION_FORM;
+                        break;
+                    }
+                    if (*next_lexical_unit != '\0' &&
+                        detect_to_which_lexical_unit_string_belongs(next_lexical_unit) == type_of_lexical_unit) {
+                        result = ILLEGAL_EXPRESSION_FORM;
+                        break;
+                    }
+                }
+                    break;
+                case OPENING_BRACKET: {
+                    if (*prev_lexical_unit != '\0' &&
+                        (detect_to_which_lexical_unit_string_belongs(prev_lexical_unit) == VARIABLE ||
+                         detect_to_which_lexical_unit_string_belongs(prev_lexical_unit) == NUMBER)) {
+                        result = ILLEGAL_EXPRESSION_FORM;
+                        break;
+                    }
+
+                    if (*next_lexical_unit != '\0' &&
+                        detect_to_which_lexical_unit_string_belongs(next_lexical_unit) == OPERATOR) {
+                        result = ILLEGAL_EXPRESSION_FORM;
+                        break;
+                    }
+                }
+                    break;
+
+                case CLOSING_BRACKET: {
+                    if (*prev_lexical_unit != '\0' &&
+                        detect_to_which_lexical_unit_string_belongs(prev_lexical_unit) == OPERATOR) {
+                        result = ILLEGAL_EXPRESSION_FORM;
+                        break;
+                    }
+
+                    if (*next_lexical_unit != '\0' &&
+                        (detect_to_which_lexical_unit_string_belongs(next_lexical_unit) == VARIABLE ||
+                         detect_to_which_lexical_unit_string_belongs(next_lexical_unit) == NUMBER)) {
+                        result = ILLEGAL_EXPRESSION_FORM;
+                        break;
+                    }
+                }
+                    break;
+
+                case NOT_A_LEXICAL_UNIT:
+                    printf("cos poszlo nie tak...\n");
+                    break;
+            }
+
+            strcpy(prev_lexical_unit, act_lexical_unit);
+            strcpy(act_lexical_unit, next_lexical_unit);
+            separated_form = read_from_separated_form(separated_form, next_lexical_unit);
+
+        }
+    } else {
+        result = check_if_lexical_unit_is_correct(act_lexical_unit);
+    }
+
+    return result;
+}
+
 
 void expression_to_ONP(char *expression, char *ONP) {
     stack_t stack = create_stack();
