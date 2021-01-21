@@ -73,13 +73,13 @@ void test_evaluation() {
     test_expression_to_ONP("", "");
     test_expression_to_ONP("256", "256");
     test_expression_to_ONP("abcd", "abcd");
-    test_expression_to_ONP("abcd+16", "abcd 16 +");
-    test_expression_to_ONP("abcd+16*6", "abcd 16 6 * +");
-    test_expression_to_ONP("   69+  var / 3  *6", "69 var 3 / 6 * +");
-    test_expression_to_ONP("  (  (  i+someVar)   *(16   *6)+   37  )  *another  ", "i someVar + 16 6 * * 37 + another *");
+    test_expression_to_ONP("abcd + 16", "abcd 16 +");
+    test_expression_to_ONP("abcd + 16 * 6", "abcd 16 6 * +");
+    test_expression_to_ONP("69 + var / 3 * 6", "69 var 3 / 6 * +");
+    test_expression_to_ONP("( ( i + someVar ) * ( 16 * 6 ) + 37 ) * another", "i someVar + 16 6 * * 37 + another *");
     test_expression_to_ONP("3 == 4 && test || 17", "3 4 == test && 17 ||");
     test_expression_to_ONP("a == 3 || b == 5", "a 3 == b 5 == ||");
-    test_expression_to_ONP("a == (3 || b) == 5", "a 3 b || == 5 ==");
+    test_expression_to_ONP("a == ( 3 || b ) == 5", "a 3 b || == 5 ==");
 
 
 }
@@ -139,7 +139,7 @@ void test_check_if_separated_form_is_correct(char *separated_form, error_t expec
 
 void test_expression_to_ONP(char *expression, char *expected_val) {
     char ONP[LINE_LENGTH];
-    expression_to_ONP(expression, ONP);
-    run_test("test expression_to_ONP()", test_if_result_equals_expected(ONP, expected_val));
+    separated_form_to_ONP(expression, ONP);
+    run_test("test separated_form_to_ONP()", test_if_result_equals_expected(ONP, expected_val));
 }
 
