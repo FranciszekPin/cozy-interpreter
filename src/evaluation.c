@@ -2,6 +2,7 @@
 #include <ctype.h>
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 #include "stack.h"
 #include "error_manager.h"
 
@@ -340,4 +341,89 @@ void separated_form_to_ONP(char *separated_form, char *ONP) {
         *(ONP + index_of_ONP - 1) = '\0';
     else
         *ONP = '\0';
+}
+
+int evaluate_operator(char *operator, int operand_a, int operand_b) {
+    int result = 0;
+    if (strcmp(operator, "*") == 0)
+        result = operand_a * operand_b;
+    else if (strcmp(operator, "/") == 0)
+        result = operand_a / operand_b;
+    else if (strcmp(operator, "%") == 0)
+        result = operand_a % operand_b;
+    else if (strcmp(operator, "+") == 0)
+        result = operand_a + operand_b;
+    else if (strcmp(operator, "-") == 0)
+        result = operand_a - operand_b;
+    else if (strcmp(operator, ">") == 0)
+        result = operand_a > operand_b;
+    else if (strcmp(operator, ">=") == 0)
+        result = operand_a >= operand_b;
+    else if (strcmp(operator, "<") == 0)
+        result = operand_a < operand_b;
+    else if (strcmp(operator, "<=") == 0)
+        result = operand_a <= operand_b;
+    else if (strcmp(operator, "==") == 0)
+        result = operand_a == operand_b;
+    else if (strcmp(operator, "!=") == 0)
+        result = operand_a != operand_b;
+    else if (strcmp(operator, "&&") == 0)
+        result = operand_a && operand_b;
+    else if (strcmp(operator, "||") == 0)
+        result = operand_a || operand_b;
+
+    return result;
+}
+
+int evaluate_number(char *unit) {
+    return atoi(unit);
+}
+
+int evaluate_variable(char *unit) {
+    return 1;
+}
+
+int calculate_ONP_val(char *ONP_expression) {
+    stack_t stack = create_stack();
+    char lexical_unit[LINE_LENGTH];
+    lexical_unit_t type_of_lexical_unit = NOT_A_LEXICAL_UNIT;
+    size_t index_of_ONP = 0;
+
+    while (!end_of_string(ONP_expression)) {
+        ONP_expression = read_from_separated_form(ONP_expression, lexical_unit);
+        type_of_lexical_unit = detect_to_which_lexical_unit_string_belongs(lexical_unit);
+
+        if (type_of_lexical_unit != OPERATOR)
+            stack = push(stack, lexical_unit);
+        else {
+            char operand1[LINE_LENGTH];
+            char operand2[LINE_LENGTH];
+            stack = pop(stack, operand2);
+            stack = pop(stack, operand1);
+
+            int operand1_val;
+            int operand2_val;
+
+            lexical_unit_t operand1_type = detect_to_which_lexical_unit_string_belongs(operand1);
+            if (operand1_type == VARIABLE)
+                operand1_val = evaluate_variable(operand1);
+            else
+                operand1_val = evaluate_number(operand1);
+
+            lexical_unit_t operand2_type = detect_to_which_lexical_unit_string_belongs(operand2);
+            if (operand2_type == VARIABLE)
+                operand1_val = evaluate_variable(operand2);
+            else
+                operand1_val = evaluate_number(operand2);
+            int result = evaluate_operator(lexical_unit, operand1_val, operand2_val);
+
+            char result_as_string[LINE_LENGTH];
+            sprintf(result_as_string, "%d", result);
+            stack = push(stack, result_as_string);
+        }
+    }
+    char result_as_string[LINE_LENGTH];
+    stack = pop(stack, result_as_string);
+
+    return atoi(result_as_string);
 }
