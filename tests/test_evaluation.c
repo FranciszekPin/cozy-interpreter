@@ -81,7 +81,7 @@ void test_evaluation() {
     test_expression_to_ONP("a == 3 || b == 5", "a 3 == b 5 == ||");
     test_expression_to_ONP("a == ( 3 || b ) == 5", "a 3 b || == 5 ==");
 
-
+    test_calculate_ONP_val("2 3 +", 5);
 }
 
 void test_get_lexical_unit_type(char *lexical_unit, lexical_unit_t expected_val) {
@@ -143,3 +143,7 @@ void test_expression_to_ONP(char *expression, char *expected_val) {
     run_test("test separated_form_to_ONP()", test_if_result_equals_expected(ONP, expected_val));
 }
 
+void test_calculate_ONP_val(char *ONP_expression, int expected_val) {
+    int result = calculate_ONP_val(ONP_expression);
+    run_test("test calculate_ONP_val()", result == expected_val);
+}

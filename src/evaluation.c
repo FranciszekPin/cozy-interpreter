@@ -412,9 +412,9 @@ int calculate_ONP_val(char *ONP_expression) {
 
             lexical_unit_t operand2_type = detect_to_which_lexical_unit_string_belongs(operand2);
             if (operand2_type == VARIABLE)
-                operand1_val = evaluate_variable(operand2);
+                operand2_val = evaluate_variable(operand2);
             else
-                operand1_val = evaluate_number(operand2);
+                operand2_val = evaluate_number(operand2);
             int result = evaluate_operator(lexical_unit, operand1_val, operand2_val);
 
             char result_as_string[LINE_LENGTH];
