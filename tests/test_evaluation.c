@@ -1,6 +1,7 @@
 #include "test_evaluation.h"
 #include "../src/constants.h"
 #include "tester_kit.h"
+#include "../src/string_operations.h"
 
 void test_evaluation() {
     test_get_lexical_unit_type("a", VARIABLE);
