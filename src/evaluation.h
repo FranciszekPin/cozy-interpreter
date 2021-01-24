@@ -24,5 +24,6 @@ error_t check_if_separated_form_is_correct(char *separated_form);
 int calculate_ONP_val(char *ONP_expression);
 error_t check_if_lexical_unit_is_correct(char *lexical_unit);
 char * read_from_separated_form(char *separated_form, char *word);
+int evaluate_expression(char *expression);
 
 #endif //COZY_INTERPRETER_EVALUATION_H

@@ -433,3 +433,21 @@ int calculate_ONP_val(char *ONP_expression) {
 
     return result;
 }
+
+int evaluate_expression(char *expression) {
+    char separated_form[LINE_LENGTH];
+    convert_expression_to_separated_form(separated_form, expression);
+
+    int result = 0;
+    error_t potential_error = check_if_separated_form_is_correct(separated_form);
+    if (potential_error == NO_ERROR) {
+        char ONP[LINE_LENGTH];
+        separated_form_to_ONP(separated_form, ONP);
+        result = calculate_ONP_val(ONP);
+    }
+    else {
+        throw_error(potential_error);
+    }
+
+    return result;
+}
