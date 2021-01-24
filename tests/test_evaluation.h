@@ -27,4 +27,6 @@ void test_read_lexical_unit(char *expression, char *expected_val);
 
 void test_calculate_ONP_val(char *ONP_expression, int expected_val);
 
+void test_evaluate_expression(char *expression, int expected_val);
+
 #endif //COZY_INTERPRETER_TEST_EVALUATION_H

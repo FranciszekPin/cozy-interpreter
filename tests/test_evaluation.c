@@ -82,6 +82,19 @@ void test_evaluation() {
     test_expression_to_ONP("a == ( 3 || b ) == 5", "a 3 b || == 5 ==");
 
     test_calculate_ONP_val("2 3 +", 5);
+    test_calculate_ONP_val("2 3 + 7 ||", 1);
+    test_calculate_ONP_val("2 3 + 7 ||", 1);
+    test_calculate_ONP_val("2 3 + 0 &&", 0);
+    test_calculate_ONP_val("8 49 7 / <", 0);
+    test_calculate_ONP_val("someVar", 1);
+    test_calculate_ONP_val("someVar 0 &&", 0);
+    test_calculate_ONP_val("someVar 0 ||", 1);
+    test_calculate_ONP_val("someVar 00 <=", 0);
+
+    test_evaluate_expression("(3 + var) * 8", 32);
+    test_evaluate_expression("(11 / 2) == 5", 1);
+    test_evaluate_expression("  (11/2) !=  5  ", 0);
+
 }
 
 void test_get_lexical_unit_type(char *lexical_unit, lexical_unit_t expected_val) {
@@ -146,4 +159,9 @@ void test_expression_to_ONP(char *expression, char *expected_val) {
 void test_calculate_ONP_val(char *ONP_expression, int expected_val) {
     int result = calculate_ONP_val(ONP_expression);
     run_test("test calculate_ONP_val()", result == expected_val);
+}
+
+void test_evaluate_expression(char *expression, int expected_val) {
+    int result = evaluate_expression(expression);
+    run_test("test evaluate_expression()", result == expected_val);
 }
