@@ -424,6 +424,12 @@ int calculate_ONP_val(char *ONP_expression) {
     }
     char result_as_string[LINE_LENGTH];
     stack = pop(stack, result_as_string);
+    int result;
+    lexical_unit_t result_unit_type = detect_to_which_lexical_unit_string_belongs(result_as_string);
+    if (result_unit_type == VARIABLE)
+        result = evaluate_variable(result_as_string);
+    else
+        result = evaluate_number(result_as_string);
 
-    return atoi(result_as_string);
+    return result;
 }
