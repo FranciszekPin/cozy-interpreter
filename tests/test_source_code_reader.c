@@ -12,7 +12,7 @@ void test_read_source_code() {
     source_code_t source_code;
     create_source_code_reader(&source_code);
 
-    load_source_code("test.coz", &source_code);
+    load_source_code("tests/test_source_code_reader.coz", &source_code);
 
     run_test("test checking number of lines", get_number_of_lines(&source_code) == 7);
 
