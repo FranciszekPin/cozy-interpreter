@@ -12,6 +12,7 @@ void test_variable_register() {
 
     run_test("test checking if variable is defined", is_variable_defined(variable_register, "xyz") == 1);
     run_test("test checking if variable is defined", is_variable_defined(variable_register, "xyx") == 0);
+    run_test("test checking if variable is defined", is_variable_defined(variable_register, "xy") == 0);
 
     run_test("test getting variable val", get_variable_val(variable_register, "xyz") == 0);
     run_test("test getting variable val", get_variable_val(variable_register, "test") == 5);
