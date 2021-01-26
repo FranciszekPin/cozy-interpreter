@@ -6,7 +6,6 @@
 #define COZY_INTERPRETER_STRING_OPERATIONS_H
 
 #include <stdbool.h>
-#include "binary_tree.h"
 #include "error_manager.h"
 
 char *skip_whitespace(char *source);

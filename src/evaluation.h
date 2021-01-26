@@ -2,7 +2,6 @@
 #define COZY_INTERPRETER_EVALUATION_H
 
 #include <stdbool.h>
-#include "binary_tree.h"
 #include "error_manager.h"
 
 typedef enum {
