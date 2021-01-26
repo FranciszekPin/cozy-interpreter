@@ -1,0 +1,10 @@
+define:
+    int a
+    int ba
+    int bc
+
+program:
+    a = 7
+    if a > 6 then
+        a = 10
+    end
