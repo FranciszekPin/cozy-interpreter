@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include "stack.h"
 #include "error_manager.h"
+#include "string_operations.h"
 
 
 Operation choose_proper_operation(char operator) {
@@ -27,15 +28,6 @@ Operation choose_proper_operation(char operator) {
     }
 
     return result;
-}
-
-
-char *skip_whitespace(char *source) {
-    while (*source != '\0' && isspace(*source)) {
-        source++;
-    }
-
-    return source;
 }
 
 
@@ -64,11 +56,6 @@ int get_operator_priority(char *operator) {
         result = -1;
 
     return result;
-}
-
-
-bool equal(char *string_a, char *string_b) {
-    return strcmp(string_a, string_b) == 0;
 }
 
 
@@ -159,19 +146,6 @@ void convert_expression_to_separated_form(char *destination, char *expression) {
     }
 }
 
-char *read_from_separated_form(char *separated_form, char *word) {
-    while (*separated_form != '\0' && *separated_form != ONP_SEPARATOR) {
-        *word = *separated_form;
-        word++, separated_form++;
-    }
-
-    *word = '\0';
-    if (*separated_form == ONP_SEPARATOR)
-        separated_form++;
-
-    return separated_form;
-}
-
 error_t check_if_lexical_unit_is_correct(char *lexical_unit) {
     lexical_unit_t type_of_lexical_unit = detect_to_which_lexical_unit_string_belongs(lexical_unit);
 
@@ -210,9 +184,9 @@ error_t check_if_separated_form_is_correct(char *separated_form) {
     char next_lexical_unit[LINE_LENGTH];
 
     prev_lexical_unit[0] = '\0';
-    separated_form = read_from_separated_form(separated_form, act_lexical_unit);
+    separated_form = read_word(separated_form, act_lexical_unit);
     if (!end_of_string(separated_form)) {
-        separated_form = read_from_separated_form(separated_form, next_lexical_unit);
+        separated_form = read_word(separated_form, next_lexical_unit);
 
         error_t potential_error;
         lexical_unit_t type_of_lexical_unit;
@@ -279,7 +253,7 @@ error_t check_if_separated_form_is_correct(char *separated_form) {
 
             strcpy(prev_lexical_unit, act_lexical_unit);
             strcpy(act_lexical_unit, next_lexical_unit);
-            separated_form = read_from_separated_form(separated_form, next_lexical_unit);
+            separated_form = read_word(separated_form, next_lexical_unit);
 
         }
     } else {
@@ -297,7 +271,7 @@ void separated_form_to_ONP(char *separated_form, char *ONP) {
     size_t index_of_ONP = 0;
 
     while (!end_of_string(separated_form)) {
-        separated_form = read_from_separated_form(separated_form, lexical_unit);
+        separated_form = read_word(separated_form, lexical_unit);
         type_of_lexical_unit = detect_to_which_lexical_unit_string_belongs(lexical_unit);
 
         if (type_of_lexical_unit == NUMBER || type_of_lexical_unit == VARIABLE)
@@ -390,7 +364,7 @@ int calculate_ONP_val(char *ONP_expression) {
     size_t index_of_ONP = 0;
 
     while (!end_of_string(ONP_expression)) {
-        ONP_expression = read_from_separated_form(ONP_expression, lexical_unit);
+        ONP_expression = read_word(ONP_expression, lexical_unit);
         type_of_lexical_unit = detect_to_which_lexical_unit_string_belongs(lexical_unit);
 
         if (type_of_lexical_unit != OPERATOR)

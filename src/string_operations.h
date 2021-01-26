@@ -11,8 +11,10 @@
 
 char *skip_whitespace(char *source);
 
-char * read_from_separated_form(char *separated_form, char *word);
+char * read_word(char *separated_form, char *word);
 
 bool equal(char *string_a, char *string_b);
+
+char *read_first_word_after_whitespace(char *text, char *word);
 
 #endif //COZY_INTERPRETER_STRING_OPERATIONS_H

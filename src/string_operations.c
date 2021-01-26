@@ -25,8 +25,8 @@ bool equal(char *string_a, char *string_b) {
     return strcmp(string_a, string_b) == 0;
 }
 
-char *read_from_separated_form(char *separated_form, char *word) {
-    while (*separated_form != '\0' && *separated_form != ONP_SEPARATOR) {
+char *read_word(char *separated_form, char *word) {
+    while (*separated_form != '\0' && !isspace(*separated_form)) {
         *word = *separated_form;
         word++, separated_form++;
     }
@@ -36,4 +36,11 @@ char *read_from_separated_form(char *separated_form, char *word) {
         separated_form++;
 
     return separated_form;
+}
+
+char *read_first_word_after_whitespace(char *text, char *word) {
+    text = skip_whitespace(text);
+    text = read_word(text, word);
+
+    return text;
 }
