@@ -8,29 +8,6 @@
 #include "string_operations.h"
 
 
-Operation choose_proper_operation(char operator) {
-    Operation result = NOT_DEFINED;
-    switch (operator) {
-        case '*':
-            result = MULTIPLY;
-            break;
-        case '+':
-            result = ADD;
-            break;
-        case '/':
-            result = DIVIDE;
-            break;
-        case '-':
-            result = SUBTRACT;
-            break;
-        default:
-            result = NOT_DEFINED;
-    }
-
-    return result;
-}
-
-
 bool is_bracket(char c) {
     return (c == '(') || (c == ')');
 }
