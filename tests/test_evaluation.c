@@ -123,13 +123,13 @@ void test_end_of_string(char *expression, bool expected_val) {
 
 void test_read_from_separated_form(char *expression, char *expected_val) {
     char word[LINE_LENGTH];
-    read_from_separated_form(expression, word);
+    read_word(expression, word);
     run_test("test read_from_separated_form()", test_if_result_equals_expected(word, expected_val));
 }
 
 void test_remaining_text_read_from_separated_form(char *expression, char *expected_val) {
     char word[LINE_LENGTH];
-    expression = read_from_separated_form(expression, word);
+    expression = read_word(expression, word);
     run_test("test remaining_text_read_from_separated_form()", test_if_result_equals_expected(expression, expected_val));
 }
 
