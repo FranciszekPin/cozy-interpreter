@@ -85,6 +85,9 @@ bool is_variable_defined(variable_register_t variable_register, char *name) {
         name++;
     }
 
+    if (!variable_register->defined)
+        result = false;
+
     return result;
 }
 
