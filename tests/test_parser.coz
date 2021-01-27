@@ -4,7 +4,28 @@ define:
     int bc
 
 program:
-    a = 7
-    if a > 6 then
-        a = 10
+    ba = 17
+
+    while bc == 0
+        printVar bc
+
+        if ba > 8
+            while ba < 7
+                printStr sometext
+            end
+
+            ba = 17
+        else
+            printStr another
+            bc = 27
+        end
+
+        printStr text
+
+        if bc == 0
+            printVar a
+        end
+
     end
+
+    ba = 28
