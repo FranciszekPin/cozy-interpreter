@@ -1,7 +1,3 @@
-//
-// Created by learning-account on 24.01.2021.
-//
-
 #ifndef COZY_INTERPRETER_STRING_OPERATIONS_H
 #define COZY_INTERPRETER_STRING_OPERATIONS_H
 

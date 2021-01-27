@@ -11,10 +11,10 @@ typedef enum {
     NOT_A_TYPE
 } variable_type_t;
 
-typedef struct nd {
+typedef struct nod {
     int value;
     bool defined;
-    struct nd * next_node[NUMBER_OF_LETTERS];
+    struct nod * next_node[NUMBER_OF_LETTERS];
 } node_t;
 
 typedef node_t * variable_register_t;
