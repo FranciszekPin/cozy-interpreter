@@ -82,19 +82,22 @@ void test_evaluation() {
     test_expression_to_ONP("a == 3 || b == 5", "a 3 == b 5 == ||");
     test_expression_to_ONP("a == ( 3 || b ) == 5", "a 3 b || == 5 ==");
 
-    test_calculate_ONP_val("2 3 +", 5);
-    test_calculate_ONP_val("2 3 + 7 ||", 1);
-    test_calculate_ONP_val("2 3 + 7 ||", 1);
-    test_calculate_ONP_val("2 3 + 0 &&", 0);
-    test_calculate_ONP_val("8 49 7 / <", 0);
-    test_calculate_ONP_val("someVar", 1);
-    test_calculate_ONP_val("someVar 0 &&", 0);
-    test_calculate_ONP_val("someVar 0 ||", 1);
-    test_calculate_ONP_val("someVar 00 <=", 0);
+    variable_register_t variable_register = create();
+    variable_register = define_variable(variable_register, "somevar");
+    variable_register = define_variable(variable_register, "var");
 
-    test_evaluate_expression("(3 + var) * 8", 32);
-    test_evaluate_expression("(11 / 2) == 5", 1);
-    test_evaluate_expression("  (11/2) !=  5  ", 0);
+    test_calculate_ONP_val("2 3 +", 5, variable_register);
+    test_calculate_ONP_val("2 3 + 7 ||", 1, variable_register);
+    test_calculate_ONP_val("2 3 + 7 ||", 1, variable_register);
+    test_calculate_ONP_val("2 3 + 0 &&", 0, variable_register);
+    test_calculate_ONP_val("8 49 7 / <", 0, variable_register);
+    test_calculate_ONP_val("somevar", 0, variable_register);
+    test_calculate_ONP_val("somevar 0 &&", 0, variable_register);
+    test_calculate_ONP_val("somevar 1 ||", 1, variable_register);
+    test_calculate_ONP_val("somevar 00 >", 0, variable_register);
+
+
+    variable_register = remove_variable_register(variable_register);
 
 }
 
@@ -157,8 +160,8 @@ void test_expression_to_ONP(char *expression, char *expected_val) {
     run_test("test separated_form_to_ONP()", test_if_result_equals_expected(ONP, expected_val));
 }
 
-void test_calculate_ONP_val(char *ONP_expression, int expected_val) {
-    int result = calculate_ONP_val(ONP_expression);
+void test_calculate_ONP_val(char *ONP_expression, int expected_val, variable_register_t variable_register) {
+    int result = calculate_ONP_val(ONP_expression, variable_register);
     run_test("test calculate_ONP_val()", result == expected_val);
 }
 

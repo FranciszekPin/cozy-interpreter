@@ -25,7 +25,7 @@ void test_convert_expression_to_separated_form(char *expression, char *expected_
 
 void test_read_lexical_unit(char *expression, char *expected_val);
 
-void test_calculate_ONP_val(char *ONP_expression, int expected_val);
+void test_calculate_ONP_val(char *ONP_expression, int expected_val, variable_register_t variable_register);
 
 void test_evaluate_expression(char *expression, int expected_val);
 
