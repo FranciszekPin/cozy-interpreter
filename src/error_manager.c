@@ -6,5 +6,5 @@
 #include "error_manager.h"
 
 void throw_error(error_t error_type) {
-    printf("%d\n", error_type);
+    printf("Error: %d\n", error_type);
 }

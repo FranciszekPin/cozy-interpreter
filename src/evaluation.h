@@ -3,6 +3,7 @@
 
 #include <stdbool.h>
 #include "error_manager.h"
+#include "parser.h"
 
 typedef enum {
     NUMBER,
@@ -25,7 +26,7 @@ void convert_expression_to_separated_form(char *destination, char *expression);
 
 error_t check_if_separated_form_is_correct(char *separated_form);
 
-int calculate_ONP_val(char *ONP_expression);
+int calculate_ONP_val(char *ONP_expression, variable_register_t variable_register);
 
 error_t check_if_lexical_unit_is_correct(char *lexical_unit);
 

@@ -6,6 +6,7 @@
 #include "stack.h"
 #include "error_manager.h"
 #include "string_operations.h"
+#include "variable_register.h"
 
 
 bool is_bracket(char c) {
@@ -330,11 +331,11 @@ int evaluate_number(char *unit) {
     return atoi(unit);
 }
 
-int evaluate_variable(char *unit) {
-    return 1;
+int evaluate_variable(char *unit, variable_register_t variable_register) {
+    return get_variable_val(variable_register, unit);
 }
 
-int calculate_ONP_val(char *ONP_expression) {
+int calculate_ONP_val(char *ONP_expression, variable_register_t variable_register) {
     stack_t stack = create_stack();
     char lexical_unit[LINE_LENGTH];
     lexical_unit_t type_of_lexical_unit = NOT_A_LEXICAL_UNIT;
@@ -357,13 +358,13 @@ int calculate_ONP_val(char *ONP_expression) {
 
             lexical_unit_t operand1_type = detect_to_which_lexical_unit_string_belongs(operand1);
             if (operand1_type == VARIABLE)
-                operand1_val = evaluate_variable(operand1);
+                operand1_val = evaluate_variable(operand1, variable_register);
             else
                 operand1_val = evaluate_number(operand1);
 
             lexical_unit_t operand2_type = detect_to_which_lexical_unit_string_belongs(operand2);
             if (operand2_type == VARIABLE)
-                operand2_val = evaluate_variable(operand2);
+                operand2_val = evaluate_variable(operand2, variable_register);
             else
                 operand2_val = evaluate_number(operand2);
             int result = evaluate_operator(lexical_unit, operand1_val, operand2_val);
@@ -378,7 +379,7 @@ int calculate_ONP_val(char *ONP_expression) {
     int result;
     lexical_unit_t result_unit_type = detect_to_which_lexical_unit_string_belongs(result_as_string);
     if (result_unit_type == VARIABLE)
-        result = evaluate_variable(result_as_string);
+        result = evaluate_variable(result_as_string, variable_register);
     else
         result = evaluate_number(result_as_string);
 
@@ -394,7 +395,7 @@ int evaluate_expression(char *expression) {
     if (potential_error == NO_ERROR) {
         char ONP[LINE_LENGTH];
         separated_form_to_ONP(separated_form, ONP);
-        result = calculate_ONP_val(ONP);
+        result = calculate_ONP_val(ONP, NULL);
     }
     else {
         throw_error(potential_error);
