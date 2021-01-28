@@ -25,6 +25,7 @@ variable_register_t define_variable(variable_register_t variable_register, char 
         int letter_code = get_letter_code(*name);
 
         if (letter_code >= NUMBER_OF_LETTERS) {
+            // TODO: non-letter chars
             printf("Name contains non-letter chars\n");
         }
 

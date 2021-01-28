@@ -1,0 +1,19 @@
+define:
+    int a
+    int ba
+    int bc
+    int i
+
+program:
+    ba = 17
+    ba = ba + 7
+
+    while i < 10
+        if (i / 2) * 2 == i
+            printStr iPodzielne
+        else
+            printStr iniepodzielne
+        end
+
+        i = i + 1
+    end
