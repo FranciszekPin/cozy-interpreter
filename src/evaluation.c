@@ -402,3 +402,16 @@ int evaluate_expression(char *expression) {
 
     return result;
 }
+
+void expression_to_ONP(char *expression, char *ONP) {
+    char result[LINE_LENGTH];
+
+    convert_expression_to_separated_form(result, expression);
+    error_t potential_error = check_if_separated_form_is_correct(result);
+    if (potential_error == NO_ERROR) {
+        separated_form_to_ONP(result, ONP);
+    }
+    else {
+        throw_error(potential_error);
+    }
+}
