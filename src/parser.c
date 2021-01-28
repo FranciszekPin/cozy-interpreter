@@ -4,6 +4,7 @@
 #include "string_operations.h"
 #include "variable_register.h"
 #include "instruction.h"
+#include "evaluation.h"
 
 
 void load_defined_variables(source_code_t *source_code, variable_register_t variable_register) {
@@ -87,15 +88,18 @@ instruction_tree_t parse_program(source_code_t *source_code) {
                 if (!equal(word, "=")) {
                     // TODO: handling when bad assigment expression is used
                 }
-
+                char ONP[LINE_LENGTH];
+                expression_to_ONP(line, ONP);
                 instruction_tree_t instruction = create_instruction_assignment(ASSIGN, upper_instruction, variable_name,
-                                                                               line);
+                                                                               ONP);
                 add_with_respect_if(upper_instruction, instruction, upper_instruction->in_instruction_if_true);
 
             }
                 break;
             case IF: {
-                instruction_tree_t instruction = create_instruction(IF, upper_instruction, line);
+                char ONP[LINE_LENGTH];
+                expression_to_ONP(line, ONP);
+                instruction_tree_t instruction = create_instruction(IF, upper_instruction, ONP);
                 add_with_respect_if(upper_instruction, instruction, upper_instruction->in_instruction_if_true);
                 upper_instruction = instruction;
             }
@@ -112,7 +116,9 @@ instruction_tree_t parse_program(source_code_t *source_code) {
                 break;
 
             case WHILE: {
-                instruction_tree_t instruction = create_instruction(WHILE, upper_instruction, line);
+                char ONP[LINE_LENGTH];
+                expression_to_ONP(line, ONP);
+                instruction_tree_t instruction = create_instruction(WHILE, upper_instruction, ONP);
                 add_with_respect_if(upper_instruction, instruction, upper_instruction->in_instruction_if_true);
                 upper_instruction = instruction;
             }
@@ -120,7 +126,9 @@ instruction_tree_t parse_program(source_code_t *source_code) {
 
             case PRINT_VARIABLE:
             case PRINT_STRING: {
-                instruction_tree_t instruction = create_instruction(type_of_instruction, upper_instruction, line);
+                char ONP[LINE_LENGTH];
+                expression_to_ONP(line, ONP);
+                instruction_tree_t instruction = create_instruction(type_of_instruction, upper_instruction, ONP);
                 add_with_respect_if(upper_instruction, instruction, upper_instruction->in_instruction_if_true);
             }
 
