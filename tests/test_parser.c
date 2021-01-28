@@ -68,7 +68,7 @@ void test_parser() {
     run_test("testing parsing program: outer_while", act_instruction->next_instruction == forth_assigment);
     run_test("testing parsing program: outer_while", act_instruction->instruction_if_true == first_print_var);
     run_test("testing parsing program: outer_while", act_instruction->instruction_if_false == NULL);
-    run_test("testing parsing program: outer_while", equal(act_instruction->ONP_expression, "17"));
+    run_test("testing parsing program: outer_while", equal(act_instruction->ONP_expression, "bc 0 =="));
     run_test("testing parsing program: outer_while", equal(act_instruction->variable_name, ""));
 
     // first_print_var
@@ -88,7 +88,7 @@ void test_parser() {
     run_test("testing parsing program: first_if", act_instruction->next_instruction == third_print_str);
     run_test("testing parsing program: first_if", act_instruction->instruction_if_true == inner_while);
     run_test("testing parsing program: first_if", act_instruction->instruction_if_false == second_print_str);
-    run_test("testing parsing program: first_if", equal(act_instruction->ONP_expression, "bc"));
+    run_test("testing parsing program: first_if", equal(act_instruction->ONP_expression, "ba 8 >"));
     run_test("testing parsing program: first_if", equal(act_instruction->variable_name, ""));
 
     // inner_while
@@ -98,7 +98,7 @@ void test_parser() {
     run_test("testing parsing program: inner_while", act_instruction->next_instruction == second_assigment);
     run_test("testing parsing program: inner_while", act_instruction->instruction_if_true == first_print_str);
     run_test("testing parsing program: inner_while", act_instruction->instruction_if_false == NULL);
-    run_test("testing parsing program: inner_while", equal(act_instruction->ONP_expression, "bc"));
+    run_test("testing parsing program: inner_while", equal(act_instruction->ONP_expression, "ba 7 <"));
     run_test("testing parsing program: inner_while", equal(act_instruction->variable_name, ""));
 
     // first_print_str
@@ -108,7 +108,7 @@ void test_parser() {
     run_test("testing parsing program: first_print_str", act_instruction->next_instruction == NULL);
     run_test("testing parsing program: first_print_str", act_instruction->instruction_if_true == NULL);
     run_test("testing parsing program: first_print_str", act_instruction->instruction_if_false == NULL);
-    run_test("testing parsing program: first_print_str", equal(act_instruction->ONP_expression, "bc"));
+    run_test("testing parsing program: first_print_str", equal(act_instruction->ONP_expression, "sometext"));
     run_test("testing parsing program: first_print_str", equal(act_instruction->variable_name, ""));
 
     // second_assigment
@@ -118,7 +118,7 @@ void test_parser() {
     run_test("testing parsing program: second_assigment", act_instruction->next_instruction == NULL);
     run_test("testing parsing program: second_assigment", act_instruction->instruction_if_true == NULL);
     run_test("testing parsing program: second_assigment", act_instruction->instruction_if_false == NULL);
-    run_test("testing parsing program: second_assigment", equal(act_instruction->ONP_expression, "bc"));
+    run_test("testing parsing program: second_assigment", equal(act_instruction->ONP_expression, "17"));
     run_test("testing parsing program: second_assigment", equal(act_instruction->variable_name, "ba"));
 
     // second_print_str
@@ -128,7 +128,7 @@ void test_parser() {
     run_test("testing parsing program: second_print_str", act_instruction->next_instruction == third_assigmnet);
     run_test("testing parsing program: second_print_str", act_instruction->instruction_if_true == NULL);
     run_test("testing parsing program: second_print_str", act_instruction->instruction_if_false == NULL);
-    run_test("testing parsing program: second_print_str", equal(act_instruction->ONP_expression, "bc"));
+    run_test("testing parsing program: second_print_str", equal(act_instruction->ONP_expression, "another"));
     run_test("testing parsing program: second_print_str", equal(act_instruction->variable_name, ""));
 
     // third_assigmnet
@@ -138,7 +138,7 @@ void test_parser() {
     run_test("testing parsing program: third_assigmnet", act_instruction->next_instruction == NULL);
     run_test("testing parsing program: third_assigmnet", act_instruction->instruction_if_true == NULL);
     run_test("testing parsing program: third_assigmnet", act_instruction->instruction_if_false == NULL);
-    run_test("testing parsing program: third_assigmnet", equal(act_instruction->ONP_expression, "bc"));
+    run_test("testing parsing program: third_assigmnet", equal(act_instruction->ONP_expression, "27"));
     run_test("testing parsing program: third_assigmnet", equal(act_instruction->variable_name, "bc"));
 
     // third_print_str
@@ -148,7 +148,7 @@ void test_parser() {
     run_test("testing parsing program: third_print_str", act_instruction->next_instruction == second_if);
     run_test("testing parsing program: third_print_str", act_instruction->instruction_if_true == NULL);
     run_test("testing parsing program: third_print_str", act_instruction->instruction_if_false == NULL);
-    run_test("testing parsing program: third_print_str", equal(act_instruction->ONP_expression, "bc"));
+    run_test("testing parsing program: third_print_str", equal(act_instruction->ONP_expression, "text"));
     run_test("testing parsing program: third_print_str", equal(act_instruction->variable_name, ""));
 
     // second_if
@@ -158,7 +158,7 @@ void test_parser() {
     run_test("testing parsing program: second_if", act_instruction->next_instruction == NULL);
     run_test("testing parsing program: second_if", act_instruction->instruction_if_true == second_print_var);
     run_test("testing parsing program: second_if", act_instruction->instruction_if_false == NULL);
-    run_test("testing parsing program: second_if", equal(act_instruction->ONP_expression, "bc"));
+    run_test("testing parsing program: second_if", equal(act_instruction->ONP_expression, "bc 0 =="));
     run_test("testing parsing program: second_if", equal(act_instruction->variable_name, ""));
 
     // second_print_var
@@ -168,7 +168,7 @@ void test_parser() {
     run_test("testing parsing program: second_print_var", act_instruction->next_instruction == NULL);
     run_test("testing parsing program: second_print_var", act_instruction->instruction_if_true == NULL);
     run_test("testing parsing program: second_print_var", act_instruction->instruction_if_false == NULL);
-    run_test("testing parsing program: second_print_var", equal(act_instruction->ONP_expression, "bc"));
+    run_test("testing parsing program: second_print_var", equal(act_instruction->ONP_expression, "a"));
     run_test("testing parsing program: second_print_var", equal(act_instruction->variable_name, ""));
 
     // second_print_var
@@ -178,7 +178,7 @@ void test_parser() {
     run_test("testing parsing program: forth_assigment", act_instruction->next_instruction == NULL);
     run_test("testing parsing program: forth_assigment", act_instruction->instruction_if_true == NULL);
     run_test("testing parsing program: forth_assigment", act_instruction->instruction_if_false == NULL);
-    run_test("testing parsing program: forth_assigment", equal(act_instruction->ONP_expression, "ba"));
+    run_test("testing parsing program: forth_assigment", equal(act_instruction->ONP_expression, "28"));
     run_test("testing parsing program: forth_assigment", equal(act_instruction->variable_name, "ba"));
 
     remove_instruction_tree(instruction_tree);
