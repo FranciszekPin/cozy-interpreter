@@ -1,7 +1,3 @@
-//
-// Created by learning-account on 20.01.2021.
-//
-
 #ifndef COZY_INTERPRETER_ERROR_MANAGER_H
 #define COZY_INTERPRETER_ERROR_MANAGER_H
 
@@ -12,10 +8,14 @@ typedef enum {
     VARIABLE_AFTER_VARIABLE,
     ILLEGAL_CHARACTER_USAGE,
     ILLEGAL_EXPRESSION_FORM,
+    EMPTY_FILE,
+    NO_PROGRAM_CLAUSE,
+    NO_NEW_LINE_AFTER_CLAUSE,
+    WRONG_VARIABLE_TYPE_NAME,
     NO_ERROR
 } error_t;
 
-void throw_error(error_t error_type);
+void throw_error(error_t error_type, int line_number);
 
 
 #endif //COZY_INTERPRETER_ERROR_MANAGER_H

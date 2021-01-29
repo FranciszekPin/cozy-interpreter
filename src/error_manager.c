@@ -1,10 +1,23 @@
-//
-// Created by learning-account on 20.01.2021.
-//
-
 #include <stdio.h>
+#include <stdlib.h>
 #include "error_manager.h"
 
-void throw_error(error_t error_type) {
-    printf("Error: %d\n", error_type);
+void throw_error(error_t error_type, int line_number) {
+    printf("Error in line %d: ", line_number);
+    switch (error_type) {
+        case EMPTY_FILE:
+            printf("file is empty.\n");
+            break;
+        case NO_PROGRAM_CLAUSE:
+            printf("there is no program clause\n");
+            break;
+        case NO_NEW_LINE_AFTER_CLAUSE:
+            printf("there should be no characters after clause\n");
+            break;
+        case WRONG_VARIABLE_TYPE_NAME:
+            printf("specified variable type does not exist.\n");
+            break;
+    }
+    //printf("Error: %d\n", error_type);
+    exit(0);
 }

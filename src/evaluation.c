@@ -80,7 +80,7 @@ char *read_lexical_unit(char *source, char *word) {
         source++, word++;
     } else {
         source++;
-        throw_error(ILLEGAL_CHARACTER_USAGE);
+        throw_error(ILLEGAL_CHARACTER_USAGE, 0);
     }
 
     source = skip_whitespace(source);
@@ -398,7 +398,7 @@ int evaluate_expression(char *expression) {
         result = calculate_ONP_val(ONP, NULL);
     }
     else {
-        throw_error(potential_error);
+        throw_error(potential_error, 0);
     }
 
     return result;
@@ -413,6 +413,6 @@ void expression_to_ONP(char *expression, char *ONP) {
         separated_form_to_ONP(result, ONP);
     }
     else {
-        throw_error(potential_error);
+        throw_error(potential_error, 0);
     }
 }

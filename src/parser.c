@@ -11,7 +11,7 @@ void load_defined_variables(source_code_t *source_code, variable_register_t vari
     skip_empty_lines(source_code);
 
     if (!are_lines_to_read(source_code)) {
-        // TODO: handling when file is empty
+        throw_error(EMPTY_FILE, get_act_line_number(source_code)+1);
     }
 
     char *act_line = get_code_line(source_code);
@@ -19,10 +19,15 @@ void load_defined_variables(source_code_t *source_code, variable_register_t vari
     act_line = read_first_word_after_whitespace(act_line, word);
 
     if (!equal(word, "define:")) {
-        // TODO: handling when there is no define clasule
+        if (!equal(word, "program:"))
+            throw_error(NO_PROGRAM_CLAUSE, get_act_line_number(source_code)+1);
+        move_to_next_line(source_code);
+        return;
     }
 
-    // TODO: handling when there is word after define clasule
+    if (*act_line != '\n') {
+        throw_error(NO_NEW_LINE_AFTER_CLAUSE, get_act_line_number(source_code)+1);
+    }
 
     move_to_next_line(source_code);
     skip_empty_lines(source_code);
@@ -33,11 +38,16 @@ void load_defined_variables(source_code_t *source_code, variable_register_t vari
 
         move_to_next_line(source_code);
         skip_empty_lines(source_code);
-        // TODO: handling end of file
-        read_first_word_after_whitespace(get_code_line(source_code), word);
+
+        if (are_lines_to_read(source_code))
+            read_first_word_after_whitespace(get_code_line(source_code), word);
     }
 
-    // TODO: handling when there is word after program clausule
+    act_line = read_first_word_after_whitespace(get_code_line(source_code), word);
+    if (equal("program:", word) && *act_line != '\n') {
+        throw_error(NO_NEW_LINE_AFTER_CLAUSE, get_act_line_number(source_code)+1);
+
+    }
 
     move_to_next_line(source_code);
     skip_empty_lines(source_code);
@@ -50,7 +60,7 @@ void load_variable(source_code_t *source_code, variable_register_t variable_regi
     variable_type_t variable_type = detect_variable_type(word);
 
     if (variable_type == NOT_A_TYPE) {
-        // TODO: handling bad type name
+        throw_error(WRONG_VARIABLE_TYPE_NAME, get_act_line_number(source_code)+1);
     }
 
     act_line = read_first_word_after_whitespace(act_line, word);
