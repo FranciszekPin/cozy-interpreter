@@ -13,6 +13,7 @@ typedef enum {
     WHILE,
     PRINT_STRING,
     PRINT_VARIABLE,
+    READ,
     START_PROGRAM
 } type_of_instruction_t;
 

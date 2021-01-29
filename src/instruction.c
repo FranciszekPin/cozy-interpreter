@@ -17,6 +17,8 @@ type_of_instruction_t detect_type_of_instruction(char *word) {
         typeOfInstruction = PRINT_STRING;
     else if (equal(word, "printVar"))
         typeOfInstruction = PRINT_VARIABLE;
+    else if (equal(word, "read"))
+        typeOfInstruction = READ;
 
     return typeOfInstruction;
 }

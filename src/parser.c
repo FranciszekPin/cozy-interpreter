@@ -131,6 +131,17 @@ instruction_tree_t parse_program(source_code_t *source_code) {
                 instruction_tree_t instruction = create_instruction(type_of_instruction, upper_instruction, ONP);
                 add_with_respect_if(upper_instruction, instruction, upper_instruction->in_instruction_if_true);
             }
+                break;
+
+
+            case READ: {
+                char ONP[LINE_LENGTH];
+                expression_to_ONP(line, ONP);
+                instruction_tree_t instruction = create_instruction(READ, upper_instruction, ONP);
+                add_with_respect_if(upper_instruction, instruction, upper_instruction->in_instruction_if_true);
+            }
+                break;
+
 
         }
 

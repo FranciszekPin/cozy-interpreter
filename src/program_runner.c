@@ -54,6 +54,17 @@ void run_program(instruction_tree_t instruction_tree, variable_register_t variab
         }
             break;
 
+        case READ: {
+            if (!is_variable_defined(variableRegister, act_instruction->ONP_expression)) {
+                // TODO: hnadling undefined variable
+            }
+
+            int tmp;
+            scanf("%d", &tmp);
+            set_val(variableRegister, act_instruction->ONP_expression, tmp);
+        }
+            break;
+
         default: {
             // TODO: handling wrong instruction type
             exit(1);
