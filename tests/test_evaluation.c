@@ -22,7 +22,7 @@ void test_evaluation() {
     test_skip_whitespace(" \n  \t  some_text  ", "some_text  ");
     test_skip_whitespace(" \n  \t  some_text \n\t ", "some_text \n\t ");
 
-    test_read_lexical_unit("^^ abcd+5", "");
+    test_read_lexical_unit("var abcd+5", "var");
     test_read_lexical_unit("abcd+5", "abcd");
     test_read_lexical_unit("abcd+ajs;dlfj", "abcd");
     test_read_lexical_unit("==abcd+ajs;dlfj", "==");
@@ -46,7 +46,7 @@ void test_evaluation() {
 
     test_convert_expression_to_separated_form("3+5", "3 + 5");
     test_convert_expression_to_separated_form("((", "( (");
-    test_convert_expression_to_separated_form("3^5", "3  5");
+    test_convert_expression_to_separated_form("3*5", "3 * 5");
     test_convert_expression_to_separated_form("3+++5", "3 +++ 5");
     test_convert_expression_to_separated_form("  <><==36 +++ \t  ( 5 var )  ", "<><== 36 +++ ( 5 var )");
 
