@@ -96,7 +96,7 @@ instruction_tree_t parse_program(source_code_t *source_code) {
                 line = read_first_word_after_whitespace(line, word);
 
                 if (!equal(word, "=")) {
-                    // TODO: handling when bad assigment expression is used
+                    throw_error(WRONG_ASSIGNMENT_EXPRESSION, get_act_line_number(source_code)+1);
                 }
                 char ONP[LINE_LENGTH];
                 expression_to_ONP(line, ONP);
@@ -152,7 +152,9 @@ instruction_tree_t parse_program(source_code_t *source_code) {
             }
                 break;
 
-
+            default: {
+                throw_error(UNKNOWN_INSTRUCTION_TYPE, -1);
+            }
         }
 
         move_to_next_line(source_code);
