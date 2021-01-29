@@ -28,6 +28,7 @@ void test_parser() {
     instruction_tree_t instruction_tree = parse_program(&source_code);
 
     instruction_tree_t start_block = instruction_tree;
+    start_block->type_of_instruction = START_PROGRAM;
     instruction_tree_t first_assigment = instruction_tree->instruction_if_true;
     instruction_tree_t outer_while = first_assigment->next_instruction;
     instruction_tree_t first_print_var = outer_while->instruction_if_true;
@@ -41,6 +42,7 @@ void test_parser() {
     instruction_tree_t second_if = third_print_str->next_instruction;
     instruction_tree_t second_print_var = second_if->instruction_if_true;
     instruction_tree_t forth_assigment = outer_while->next_instruction;
+    instruction_tree_t first_read = forth_assigment->next_instruction;
 
     // start block
     run_test("testing parsing program: start block", start_block->type_of_instruction == START_PROGRAM);
@@ -175,11 +177,21 @@ void test_parser() {
     act_instruction = forth_assigment;
     run_test("testing parsing program: forth_assigment", act_instruction->type_of_instruction == ASSIGN);
     run_test("testing parsing program: forth_assigment", act_instruction->upper_instruction == start_block);
-    run_test("testing parsing program: forth_assigment", act_instruction->next_instruction == NULL);
+    run_test("testing parsing program: forth_assigment", act_instruction->next_instruction == first_read);
     run_test("testing parsing program: forth_assigment", act_instruction->instruction_if_true == NULL);
     run_test("testing parsing program: forth_assigment", act_instruction->instruction_if_false == NULL);
     run_test("testing parsing program: forth_assigment", equal(act_instruction->ONP_expression, "28"));
     run_test("testing parsing program: forth_assigment", equal(act_instruction->variable_name, "ba"));
+
+    // first_read
+    act_instruction = first_read;
+    run_test("testing parsing program: forth_assigment", act_instruction->type_of_instruction == READ);
+    run_test("testing parsing program: forth_assigment", act_instruction->upper_instruction == start_block);
+    run_test("testing parsing program: forth_assigment", act_instruction->next_instruction == NULL);
+    run_test("testing parsing program: forth_assigment", act_instruction->instruction_if_true == NULL);
+    run_test("testing parsing program: forth_assigment", act_instruction->instruction_if_false == NULL);
+    run_test("testing parsing program: forth_assigment", equal(act_instruction->ONP_expression, "ba"));
+    //run_test("testing parsing program: forth_assigment", equal(act_instruction->variable_name, "ba"));
 
     remove_instruction_tree(instruction_tree);
 

@@ -1,19 +1,23 @@
 define:
     int a
-    int ba
-    int bc
+    int prime
     int i
 
 program:
-    ba = 17
-    ba = ba + 7
+    read a
 
-    while i < 10
-        if (i / 2) * 2 == i
-            printStr iPodzielne
-        else
-            printStr iniepodzielne
+    prime = 1
+
+    i = 2
+    while i * i <= a
+        if (a / i) * i == a
+            prime = 0
         end
+        i = i+1
+    end
 
-        i = i + 1
+    if prime == 1
+        printStr jestpierwsza
+    else
+        printStr niejestpierwsza
     end
