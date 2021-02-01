@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include "constants.h"
+#include "source_code_reader.h"
 
 typedef enum {
     INT,
@@ -23,7 +24,9 @@ int get_letter_code(char letter);
 
 node_t * create();
 
-variable_register_t define_variable(variable_register_t variable_register, char *name);
+bool is_letter_code_proper_for_variable_name(int letter_code);
+
+variable_register_t define_variable(variable_register_t variable_register, char *name, int line_number);
 
 variable_register_t set_val(variable_register_t variable_register, char *name, int val);
 

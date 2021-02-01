@@ -23,6 +23,9 @@ void throw_error(error_t error_type, int line_number) {
         case UNKNOWN_INSTRUCTION_TYPE:
             printf("wrong instruction type is passed\n");
             break;
+        case ILLEGAL_VARIABLE_NAME:
+            printf("variable name should only consist of lowercase letters \n");
+            break;
         default: {
             printf("unknown error is thrown\n");
         }
