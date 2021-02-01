@@ -23,7 +23,7 @@ type_of_instruction_t detect_type_of_instruction(char *word) {
     return typeOfInstruction;
 }
 
-instruction_tree_t create_instruction(type_of_instruction_t type_of_instruction, instruction_tree_t upper_instruction, char *ONP_expression) {
+instruction_tree_t create_instruction(type_of_instruction_t type_of_instruction, instruction_tree_t upper_instruction, char *ONP_expression, int line_number) {
     instruction_t * new_instruction = malloc(sizeof (instruction_t));
     new_instruction->type_of_instruction = type_of_instruction;
     strcpy(new_instruction->ONP_expression, ONP_expression);
@@ -33,12 +33,13 @@ instruction_tree_t create_instruction(type_of_instruction_t type_of_instruction,
     new_instruction->instruction_if_true = NULL;
     new_instruction->instruction_if_false = NULL;
     new_instruction->next_instruction = NULL;
+    new_instruction->line_number = line_number;
 
     return new_instruction;
 }
 
-instruction_t * create_instruction_assignment(type_of_instruction_t type_of_instruction,instruction_tree_t upper_instruction, char *variable_name, char *ONP_expression) {
-    instruction_t * new_instruction = create_instruction(type_of_instruction, upper_instruction, ONP_expression);
+instruction_t * create_instruction_assignment(type_of_instruction_t type_of_instruction,instruction_tree_t upper_instruction, char *variable_name, char *ONP_expression, int line_number) {
+    instruction_t * new_instruction = create_instruction(type_of_instruction, upper_instruction, ONP_expression, line_number);
 
     strcpy(new_instruction->variable_name, variable_name);
 

@@ -65,7 +65,7 @@ void load_variable(source_code_t *source_code, variable_register_t variable_regi
 
     act_line = read_first_word_after_whitespace(act_line, word);
 
-    variable_register = define_variable(variable_register, word);
+    variable_register = define_variable(variable_register, word, get_act_line_number(source_code)+1);
 }
 
 void add_with_respect_if(instruction_tree_t upper_instruction, instruction_tree_t instruction, bool is_in_true) {
@@ -79,7 +79,7 @@ void add_with_respect_if(instruction_tree_t upper_instruction, instruction_tree_
 }
 
 instruction_tree_t parse_program(source_code_t *source_code) {
-    instruction_tree_t upper_instruction = create_instruction(START_PROGRAM, NULL, "");
+    instruction_tree_t upper_instruction = create_instruction(START_PROGRAM, NULL, "", 0);
     instruction_tree_t root = upper_instruction;
     char *line;
     while (are_lines_to_read(source_code)) {
@@ -101,7 +101,7 @@ instruction_tree_t parse_program(source_code_t *source_code) {
                 char ONP[LINE_LENGTH];
                 expression_to_ONP(line, ONP);
                 instruction_tree_t instruction = create_instruction_assignment(ASSIGN, upper_instruction, variable_name,
-                                                                               ONP);
+                                                                               ONP, get_act_line_number(source_code)+1);
                 add_with_respect_if(upper_instruction, instruction, upper_instruction->in_instruction_if_true);
 
             }
@@ -109,7 +109,7 @@ instruction_tree_t parse_program(source_code_t *source_code) {
             case IF: {
                 char ONP[LINE_LENGTH];
                 expression_to_ONP(line, ONP);
-                instruction_tree_t instruction = create_instruction(IF, upper_instruction, ONP);
+                instruction_tree_t instruction = create_instruction(IF, upper_instruction, ONP, get_act_line_number(source_code)+1);
                 add_with_respect_if(upper_instruction, instruction, upper_instruction->in_instruction_if_true);
                 upper_instruction = instruction;
             }
@@ -128,7 +128,7 @@ instruction_tree_t parse_program(source_code_t *source_code) {
             case WHILE: {
                 char ONP[LINE_LENGTH];
                 expression_to_ONP(line, ONP);
-                instruction_tree_t instruction = create_instruction(WHILE, upper_instruction, ONP);
+                instruction_tree_t instruction = create_instruction(WHILE, upper_instruction, ONP, get_act_line_number(source_code)+1);
                 add_with_respect_if(upper_instruction, instruction, upper_instruction->in_instruction_if_true);
                 upper_instruction = instruction;
             }
@@ -138,7 +138,7 @@ instruction_tree_t parse_program(source_code_t *source_code) {
             case PRINT_STRING: {
                 char ONP[LINE_LENGTH];
                 expression_to_ONP(line, ONP);
-                instruction_tree_t instruction = create_instruction(type_of_instruction, upper_instruction, ONP);
+                instruction_tree_t instruction = create_instruction(type_of_instruction, upper_instruction, ONP, get_act_line_number(source_code)+1);
                 add_with_respect_if(upper_instruction, instruction, upper_instruction->in_instruction_if_true);
             }
                 break;
@@ -147,7 +147,7 @@ instruction_tree_t parse_program(source_code_t *source_code) {
             case READ: {
                 char ONP[LINE_LENGTH];
                 expression_to_ONP(line, ONP);
-                instruction_tree_t instruction = create_instruction(READ, upper_instruction, ONP);
+                instruction_tree_t instruction = create_instruction(READ, upper_instruction, ONP, get_act_line_number(source_code)+1);
                 add_with_respect_if(upper_instruction, instruction, upper_instruction->in_instruction_if_true);
             }
                 break;
