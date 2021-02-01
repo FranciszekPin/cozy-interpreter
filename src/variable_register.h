@@ -28,18 +28,14 @@ bool is_letter_code_proper_for_variable_name(int letter_code);
 
 variable_register_t define_variable(variable_register_t variable_register, char *name, int line_number);
 
-variable_register_t set_val(variable_register_t variable_register, char *name, int val);
+variable_register_t set_val(variable_register_t variable_register, char *name, int val, int line_number);
 
-bool is_variable_defined(variable_register_t variable_register, char *name);
+bool is_variable_defined(variable_register_t variable_register, char *name, int line_number);
 
-int get_variable_val(variable_register_t variable_register, char *name);
+int get_variable_val(variable_register_t variable_register, char *name, int line_number);
 
 variable_type_t detect_variable_type(char *name);
 
 variable_register_t remove_variable_register(variable_register_t variable_register);
-
-// TODO: detect using undefined variable
-// TODO: add detecting forbidden variable names
-// TODO: detecting declaring variable twice
 
 #endif //COZY_INTERPRETER_VARIABLE_REGISTER_H

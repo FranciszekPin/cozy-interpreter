@@ -26,12 +26,12 @@ void convert_expression_to_separated_form(char *destination, char *expression);
 
 error_t check_if_separated_form_is_correct(char *separated_form);
 
-int calculate_ONP_val(char *ONP_expression, variable_register_t variable_register);
+int calculate_ONP_val(char *ONP_expression, variable_register_t variable_register, int line_number);
 
 error_t check_if_lexical_unit_is_correct(char *lexical_unit);
 
-void expression_to_ONP(char *expression, char *ONP);
+void expression_to_ONP(char *expression, char *ONP, int line_number);
 
-int evaluate_expression(char *expression);
+int evaluate_expression(char *expression, int line_number);
 
 #endif //COZY_INTERPRETER_EVALUATION_H

@@ -22,6 +22,9 @@ bool is_letter_code_proper_for_variable_name(int letter_code) {
 }
 
 variable_register_t define_variable(variable_register_t variable_register, char *name, int line_number) {
+    if (is_variable_defined(variable_register, name, line_number))
+        throw_error(VARIABLE_DECLARED_TWICE, line_number);
+
     node_t *act_node = variable_register;
 
     while (*name != '\0') {
@@ -47,15 +50,14 @@ variable_register_t define_variable(variable_register_t variable_register, char 
     return variable_register;
 }
 
-variable_register_t set_val(variable_register_t variable_register, char *name, int val) {
+variable_register_t set_val(variable_register_t variable_register, char *name, int val, int line_number) {
+    if (!is_variable_defined(variable_register, name, line_number))
+        throw_error(ILLEGAL_VARIABLE_NAME, line_number);
+
     node_t *act_node = variable_register;
 
     while (*name != '\0') {
         int letter_code = get_letter_code(*name);
-
-        if (!is_letter_code_proper_for_variable_name(letter_code)) {
-            throw_error(ILLEGAL_VARIABLE_NAME, 0);
-        }
 
         act_node = act_node->next_node[letter_code];
 
@@ -67,14 +69,14 @@ variable_register_t set_val(variable_register_t variable_register, char *name, i
     return variable_register;
 }
 
-bool is_variable_defined(variable_register_t variable_register, char *name) {
+bool is_variable_defined(variable_register_t variable_register, char *name, int line_number) {
     bool result = true;
 
     while (*name != '\0') {
         int letter_code = get_letter_code(*name);
 
-        if (letter_code > NUMBER_OF_LETTERS) {
-            // TODO: handling when there is bad name provided
+        if (!is_letter_code_proper_for_variable_name(letter_code)) {
+            throw_error(ILLEGAL_VARIABLE_NAME, line_number);
         }
 
         if (variable_register->next_node[letter_code] == NULL) {
@@ -93,9 +95,9 @@ bool is_variable_defined(variable_register_t variable_register, char *name) {
     return result;
 }
 
-int get_variable_val(variable_register_t variable_register, char *name) {
-    if (!is_variable_defined(variable_register, name)) {
-        // TODO: handling when undefined variable is provided
+int get_variable_val(variable_register_t variable_register, char *name, int line_number) {
+    if (!is_variable_defined(variable_register, name, line_number)) {
+        throw_error(ILLEGAL_VARIABLE_NAME, line_number);
     }
 
     while (*name != '\0') {

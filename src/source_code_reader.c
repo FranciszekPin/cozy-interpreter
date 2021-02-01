@@ -29,7 +29,7 @@ void load_source_code(char *file_name, source_code_t* source_code) {
 
 char *get_code_line(source_code_t *source_code) {
     if (source_code->act_line_number >= source_code->number_of_lines) {
-        // TODO: no lines left
+        throw_error(READ_FROM_END_OF_FILE, 0);
     }
 
     return source_code->code[source_code->act_line_number];

@@ -37,6 +37,5 @@ void test_read_source_code() {
     run_test("test skipping whitespace", get_act_line_number(&source_code) == 6);
 
     move_to_next_line(&source_code);
-    skip_empty_lines(&source_code);
     run_test("test if there are lines to read", are_lines_to_read(&source_code) == false);
 }

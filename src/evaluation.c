@@ -331,11 +331,11 @@ int evaluate_number(char *unit) {
     return atoi(unit);
 }
 
-int evaluate_variable(char *unit, variable_register_t variable_register) {
-    return get_variable_val(variable_register, unit);
+int evaluate_variable(char *unit, variable_register_t variable_register, int line_number) {
+    return get_variable_val(variable_register, unit, line_number);
 }
 
-int calculate_ONP_val(char *ONP_expression, variable_register_t variable_register) {
+int calculate_ONP_val(char *ONP_expression, variable_register_t variable_register, int line_number) {
     stack_t stack = create_stack();
     char lexical_unit[LINE_LENGTH];
     lexical_unit_t type_of_lexical_unit = NOT_A_LEXICAL_UNIT;
@@ -358,13 +358,13 @@ int calculate_ONP_val(char *ONP_expression, variable_register_t variable_registe
 
             lexical_unit_t operand1_type = detect_to_which_lexical_unit_string_belongs(operand1);
             if (operand1_type == VARIABLE)
-                operand1_val = evaluate_variable(operand1, variable_register);
+                operand1_val = evaluate_variable(operand1, variable_register, line_number);
             else
                 operand1_val = evaluate_number(operand1);
 
             lexical_unit_t operand2_type = detect_to_which_lexical_unit_string_belongs(operand2);
             if (operand2_type == VARIABLE)
-                operand2_val = evaluate_variable(operand2, variable_register);
+                operand2_val = evaluate_variable(operand2, variable_register, line_number);
             else
                 operand2_val = evaluate_number(operand2);
             int result = evaluate_operator(lexical_unit, operand1_val, operand2_val);
@@ -379,14 +379,14 @@ int calculate_ONP_val(char *ONP_expression, variable_register_t variable_registe
     int result;
     lexical_unit_t result_unit_type = detect_to_which_lexical_unit_string_belongs(result_as_string);
     if (result_unit_type == VARIABLE)
-        result = evaluate_variable(result_as_string, variable_register);
+        result = evaluate_variable(result_as_string, variable_register, line_number);
     else
         result = evaluate_number(result_as_string);
 
     return result;
 }
 
-int evaluate_expression(char *expression) {
+int evaluate_expression(char *expression, int line_number) {
     char separated_form[LINE_LENGTH];
     convert_expression_to_separated_form(separated_form, expression);
 
@@ -395,7 +395,7 @@ int evaluate_expression(char *expression) {
     if (potential_error == NO_ERROR) {
         char ONP[LINE_LENGTH];
         separated_form_to_ONP(separated_form, ONP);
-        result = calculate_ONP_val(ONP, NULL);
+        result = calculate_ONP_val(ONP, NULL, line_number);
     }
     else {
         throw_error(potential_error, 0);
@@ -404,7 +404,7 @@ int evaluate_expression(char *expression) {
     return result;
 }
 
-void expression_to_ONP(char *expression, char *ONP) {
+void expression_to_ONP(char *expression, char *ONP, int line_number) {
     char result[LINE_LENGTH];
 
     convert_expression_to_separated_form(result, expression);
@@ -413,6 +413,6 @@ void expression_to_ONP(char *expression, char *ONP) {
         separated_form_to_ONP(result, ONP);
     }
     else {
-        throw_error(potential_error, 0);
+        throw_error(potential_error, line_number);
     }
 }

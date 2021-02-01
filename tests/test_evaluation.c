@@ -161,11 +161,11 @@ void test_expression_to_ONP(char *expression, char *expected_val) {
 }
 
 void test_calculate_ONP_val(char *ONP_expression, int expected_val, variable_register_t variable_register) {
-    int result = calculate_ONP_val(ONP_expression, variable_register);
+    int result = calculate_ONP_val(ONP_expression, variable_register, 0);
     run_test("test calculate_ONP_val()", result == expected_val);
 }
 
 void test_evaluate_expression(char *expression, int expected_val) {
-    int result = evaluate_expression(expression);
+    int result = evaluate_expression(expression, 0);
     run_test("test evaluate_expression()", result == expected_val);
 }

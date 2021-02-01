@@ -18,12 +18,12 @@ void run_program(instruction_tree_t instruction_tree, variable_register_t variab
 
         case ASSIGN: {
             set_val(variableRegister, act_instruction->variable_name,
-                    calculate_ONP_val(act_instruction->ONP_expression, variableRegister));
+                    calculate_ONP_val(act_instruction->ONP_expression, variableRegister, act_instruction->line_number), act_instruction->line_number);
 
         }
             break;
         case PRINT_VARIABLE: {
-            printf("%d\n", calculate_ONP_val(act_instruction->ONP_expression, variableRegister));
+            printf("%d\n", calculate_ONP_val(act_instruction->ONP_expression, variableRegister, act_instruction->line_number));
 
         }
             break;
@@ -35,7 +35,7 @@ void run_program(instruction_tree_t instruction_tree, variable_register_t variab
             break;
 
         case IF: {
-            bool is_condition_true = calculate_ONP_val(act_instruction->ONP_expression, variableRegister);
+            bool is_condition_true = calculate_ONP_val(act_instruction->ONP_expression, variableRegister, act_instruction->line_number);
 
             if (is_condition_true)
                 run_program(act_instruction->instruction_if_true, variableRegister);
@@ -45,29 +45,28 @@ void run_program(instruction_tree_t instruction_tree, variable_register_t variab
             break;
 
         case WHILE: {
-            bool is_condition_true = calculate_ONP_val(act_instruction->ONP_expression, variableRegister);
+            bool is_condition_true = calculate_ONP_val(act_instruction->ONP_expression, variableRegister, act_instruction->line_number);
             while (is_condition_true) {
                 run_program(act_instruction->instruction_if_true, variableRegister);
 
-                is_condition_true = calculate_ONP_val(act_instruction->ONP_expression, variableRegister);
+                is_condition_true = calculate_ONP_val(act_instruction->ONP_expression, variableRegister, act_instruction->line_number);
             }
         }
             break;
 
         case READ: {
-            if (!is_variable_defined(variableRegister, act_instruction->ONP_expression)) {
-                // TODO: hnadling undefined variable
+            if (!is_variable_defined(variableRegister, act_instruction->ONP_expression, act_instruction->line_number)) {
+                throw_error(ILLEGAL_VARIABLE_NAME, act_instruction->line_number);
             }
 
             int tmp;
             scanf("%d", &tmp);
-            set_val(variableRegister, act_instruction->ONP_expression, tmp);
+            set_val(variableRegister, act_instruction->ONP_expression, tmp, act_instruction->line_number);
         }
             break;
 
         default: {
-            // TODO: handling wrong instruction type
-            exit(1);
+            throw_error(UNKNOWN_INSTRUCTION_TYPE, act_instruction->line_number);
         }
     }
 

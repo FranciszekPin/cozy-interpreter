@@ -15,10 +15,11 @@ typedef enum {
     WRONG_VARIABLE_TYPE_NAME,
     WRONG_ASSIGNMENT_EXPRESSION,
     UNKNOWN_INSTRUCTION_TYPE,
+    VARIABLE_DECLARED_TWICE,
+    READ_FROM_END_OF_FILE,
     NO_ERROR
 } error_t;
 
 void throw_error(error_t error_type, int line_number);
-
 
 #endif //COZY_INTERPRETER_ERROR_MANAGER_H

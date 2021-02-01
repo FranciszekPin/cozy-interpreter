@@ -24,8 +24,16 @@ void throw_error(error_t error_type, int line_number) {
             printf("wrong instruction type is passed\n");
             break;
         case ILLEGAL_VARIABLE_NAME:
-            printf("variable name should only consist of lowercase letters \n");
+            printf("variable with given name does not exist \n");
             break;
+        case ILLEGAL_EXPRESSION_FORM:
+            printf("expression format is wrong \n");
+            break;
+        case VARIABLE_DECLARED_TWICE:
+            printf("variable is declared second time \n");
+            break;
+        case READ_FROM_END_OF_FILE:
+            printf("attemp to read end of file\n");
         default: {
             printf("unknown error is thrown\n");
         }
