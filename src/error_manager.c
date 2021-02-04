@@ -34,6 +34,10 @@ void throw_error(error_t error_type, int line_number) {
             break;
         case READ_FROM_END_OF_FILE:
             printf("attemp to read end of file\n");
+            break;
+        case WRONG_PROGRAM_STRUCTURE:
+            printf("wrong program structure\n");
+            break;
         default: {
             printf("unknown error is thrown\n");
         }

@@ -56,8 +56,10 @@ void skip_empty_lines(source_code_t *source_code) {
     act_line = skip_whitespace(act_line);
     while (are_lines_to_read(source_code) && *act_line == '\0') {
         move_to_next_line(source_code);
-        act_line = get_code_line(source_code);
-        act_line = skip_whitespace(act_line);
+        if (are_lines_to_read(source_code)) {
+            act_line = get_code_line(source_code);
+            act_line = skip_whitespace(act_line);
+        }
     }
 }
 

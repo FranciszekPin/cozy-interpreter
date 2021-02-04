@@ -81,9 +81,12 @@ void add_with_respect_if(instruction_tree_t upper_instruction, instruction_tree_
 instruction_tree_t parse_program(source_code_t *source_code) {
     instruction_tree_t upper_instruction = create_instruction(START_PROGRAM, NULL, "", 0);
     instruction_tree_t root = upper_instruction;
+
+    int remaining_to_end = 0;
     char *line;
+    skip_empty_lines(source_code);
     while (are_lines_to_read(source_code)) {
-        skip_empty_lines(source_code);
+
         char word[LINE_LENGTH];
         line = get_code_line(source_code);
         line = read_first_word_after_whitespace(line, word);
@@ -112,6 +115,7 @@ instruction_tree_t parse_program(source_code_t *source_code) {
                 instruction_tree_t instruction = create_instruction(IF, upper_instruction, ONP, get_act_line_number(source_code)+1);
                 add_with_respect_if(upper_instruction, instruction, upper_instruction->in_instruction_if_true);
                 upper_instruction = instruction;
+                remaining_to_end++;
             }
                 break;
 
@@ -122,6 +126,7 @@ instruction_tree_t parse_program(source_code_t *source_code) {
 
             case END: {
                 upper_instruction = upper_instruction->upper_instruction;
+                remaining_to_end--;
             }
                 break;
 
@@ -131,6 +136,7 @@ instruction_tree_t parse_program(source_code_t *source_code) {
                 instruction_tree_t instruction = create_instruction(WHILE, upper_instruction, ONP, get_act_line_number(source_code)+1);
                 add_with_respect_if(upper_instruction, instruction, upper_instruction->in_instruction_if_true);
                 upper_instruction = instruction;
+                remaining_to_end++;
             }
                 break;
 
@@ -158,7 +164,12 @@ instruction_tree_t parse_program(source_code_t *source_code) {
         }
 
         move_to_next_line(source_code);
+        if (are_lines_to_read(source_code))
+            skip_empty_lines(source_code);
     }
+
+    if (remaining_to_end != 0)
+        throw_error(WRONG_PROGRAM_STRUCTURE, 0);
 
     return root;
 }
