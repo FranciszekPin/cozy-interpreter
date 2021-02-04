@@ -8,7 +8,8 @@
 
 
 void load_defined_variables(source_code_t *source_code, variable_register_t variable_register) {
-    skip_empty_lines(source_code);
+    if (are_lines_to_read(source_code))
+        skip_empty_lines(source_code);
 
     if (!are_lines_to_read(source_code)) {
         throw_error(EMPTY_FILE, get_act_line_number(source_code)+1);
@@ -25,32 +26,38 @@ void load_defined_variables(source_code_t *source_code, variable_register_t vari
         return;
     }
 
-    if (*act_line != '\n') {
+    if (*act_line != '\n' && *act_line != '\0') {
         throw_error(NO_NEW_LINE_AFTER_CLAUSE, get_act_line_number(source_code)+1);
     }
 
     move_to_next_line(source_code);
-    skip_empty_lines(source_code);
-    read_first_word_after_whitespace(get_code_line(source_code), word);
+    if (are_lines_to_read(source_code)) {
+        skip_empty_lines(source_code);
+        read_first_word_after_whitespace(get_code_line(source_code), word);
+    }
 
     while (are_lines_to_read(source_code) && !equal("program:", word)) {
         load_variable(source_code, variable_register);
 
         move_to_next_line(source_code);
-        skip_empty_lines(source_code);
 
-        if (are_lines_to_read(source_code))
+        if (are_lines_to_read(source_code)) {
+            skip_empty_lines(source_code);
             read_first_word_after_whitespace(get_code_line(source_code), word);
+        }
     }
 
-    act_line = read_first_word_after_whitespace(get_code_line(source_code), word);
-    if (equal("program:", word) && *act_line != '\n') {
-        throw_error(NO_NEW_LINE_AFTER_CLAUSE, get_act_line_number(source_code)+1);
+    if (are_lines_to_read(source_code)) {
+        act_line = read_first_word_after_whitespace(get_code_line(source_code), word);
+        if (equal("program:", word) && *act_line != '\n' && *act_line != '\0') {
+            throw_error(NO_NEW_LINE_AFTER_CLAUSE, get_act_line_number(source_code) + 1);
 
+        }
     }
 
     move_to_next_line(source_code);
-    skip_empty_lines(source_code);
+    if (are_lines_to_read(source_code))
+        skip_empty_lines(source_code);
 }
 
 void load_variable(source_code_t *source_code, variable_register_t variable_register) {
@@ -84,7 +91,8 @@ instruction_tree_t parse_program(source_code_t *source_code) {
 
     int remaining_to_end = 0;
     char *line;
-    skip_empty_lines(source_code);
+    if (are_lines_to_read(source_code))
+        skip_empty_lines(source_code);
     while (are_lines_to_read(source_code)) {
 
         char word[LINE_LENGTH];
