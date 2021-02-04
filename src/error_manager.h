@@ -2,6 +2,7 @@
 #define COZY_INTERPRETER_ERROR_MANAGER_H
 
 typedef enum {
+    NO_ERROR,
     INCORRECT_BRACKETS,
     WRONG_OPERATOR_USAGE,
     NUMBER_AFTER_NUMBER,
@@ -17,8 +18,7 @@ typedef enum {
     UNKNOWN_INSTRUCTION_TYPE,
     VARIABLE_DECLARED_TWICE,
     READ_FROM_END_OF_FILE,
-    WRONG_PROGRAM_STRUCTURE,
-    NO_ERROR
+    WRONG_PROGRAM_STRUCTURE
 } error_t;
 
 void throw_error(error_t error_type, int line_number);

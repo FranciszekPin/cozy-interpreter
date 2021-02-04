@@ -43,5 +43,5 @@ void throw_error(error_t error_type, int line_number) {
         }
     }
     //printf("Error: %d\n", error_type);
-    exit(0);
+    exit(error_type);
 }
