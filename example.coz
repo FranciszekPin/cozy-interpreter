@@ -1,0 +1,18 @@
+define:
+    int c
+    int ga
+    int res
+
+
+program:
+    c = 10
+    while c > 0
+        printVar c
+        c = c-1
+    end
+    if c == 0
+
+    else
+    else
+
+    if sth
