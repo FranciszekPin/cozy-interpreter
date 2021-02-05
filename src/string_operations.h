@@ -2,7 +2,6 @@
 #define COZY_INTERPRETER_STRING_OPERATIONS_H
 
 #include <stdbool.h>
-#include "error_manager.h"
 
 char *skip_whitespace(char *source);
 

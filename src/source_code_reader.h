@@ -3,6 +3,7 @@
 
 #include <stdbool.h>
 #include "constants.h"
+#include "string_operations.h"
 
 typedef struct {
     char code[MAX_NUMBER_OF_LINES][LINE_LENGTH];

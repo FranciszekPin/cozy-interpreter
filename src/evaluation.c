@@ -65,8 +65,10 @@ lexical_unit_t detect_to_which_lexical_unit_string_belongs(char *lexical_unit) {
 }
 
 
-char *read_lexical_unit(char *source, char *word) {
+char *read_lexical_unit(char *source, char *word, instruction_tree_t instruction_tree, variable_register_t variable_register) {
     source = skip_whitespace(source);
+
+
 
     lexical_unit_t act_lexical_unit = detect_to_which_lexical_unit_string_belongs(source);
 
@@ -80,7 +82,7 @@ char *read_lexical_unit(char *source, char *word) {
         source++, word++;
     } else {
         source++;
-        throw_error(ILLEGAL_CHARACTER_USAGE, 0);
+        throw_error(ILLEGAL_CHARACTER_USAGE, 0, instruction_tree, variable_register);
     }
 
     source = skip_whitespace(source);
@@ -109,11 +111,11 @@ int insert_new_lexical_unit_to_string(char *destination, char *source, size_t in
     return index;
 }
 
-void convert_expression_to_separated_form(char *destination, char *expression) {
+void convert_expression_to_separated_form(char *destination, char *expression, instruction_tree_t instruction_tree, variable_register_t variable_register) {
     char lexical_unit[LINE_LENGTH];
     size_t index_of_destination = 0;
     while (!end_of_string(expression)) {
-        expression = read_lexical_unit(expression, lexical_unit);
+        expression = read_lexical_unit(expression, lexical_unit, instruction_tree, variable_register);
         index_of_destination = insert_new_lexical_unit_to_string(destination, lexical_unit, index_of_destination);
     }
 
@@ -331,11 +333,11 @@ int evaluate_number(char *unit) {
     return atoi(unit);
 }
 
-int evaluate_variable(char *unit, variable_register_t variable_register, int line_number) {
-    return get_variable_val(variable_register, unit, line_number);
+int evaluate_variable(char *unit, variable_register_t variable_register, int line_number, instruction_tree_t instruction_tree) {
+    return get_variable_val(variable_register, unit, line_number, instruction_tree);
 }
 
-int calculate_ONP_val(char *ONP_expression, variable_register_t variable_register, int line_number) {
+int calculate_ONP_val(char *ONP_expression, variable_register_t variable_register, int line_number, instruction_tree_t instruction_tree) {
     stack_t stack = create_stack();
     char lexical_unit[LINE_LENGTH];
     lexical_unit_t type_of_lexical_unit = NOT_A_LEXICAL_UNIT;
@@ -358,13 +360,13 @@ int calculate_ONP_val(char *ONP_expression, variable_register_t variable_registe
 
             lexical_unit_t operand1_type = detect_to_which_lexical_unit_string_belongs(operand1);
             if (operand1_type == VARIABLE)
-                operand1_val = evaluate_variable(operand1, variable_register, line_number);
+                operand1_val = evaluate_variable(operand1, variable_register, line_number, instruction_tree);
             else
                 operand1_val = evaluate_number(operand1);
 
             lexical_unit_t operand2_type = detect_to_which_lexical_unit_string_belongs(operand2);
             if (operand2_type == VARIABLE)
-                operand2_val = evaluate_variable(operand2, variable_register, line_number);
+                operand2_val = evaluate_variable(operand2, variable_register, line_number, instruction_tree);
             else
                 operand2_val = evaluate_number(operand2);
             int result = evaluate_operator(lexical_unit, operand1_val, operand2_val);
@@ -379,40 +381,45 @@ int calculate_ONP_val(char *ONP_expression, variable_register_t variable_registe
     int result;
     lexical_unit_t result_unit_type = detect_to_which_lexical_unit_string_belongs(result_as_string);
     if (result_unit_type == VARIABLE)
-        result = evaluate_variable(result_as_string, variable_register, line_number);
+        result = evaluate_variable(result_as_string, variable_register, line_number, instruction_tree);
     else
         result = evaluate_number(result_as_string);
 
     return result;
 }
 
-int evaluate_expression(char *expression, int line_number) {
+int evaluate_expression(char *expression, int line_number, instruction_tree_t instruction_tree, variable_register_t variable_register) {
     char separated_form[LINE_LENGTH];
-    convert_expression_to_separated_form(separated_form, expression);
+    convert_expression_to_separated_form(separated_form, expression, instruction_tree, variable_register);
 
     int result = 0;
     error_t potential_error = check_if_separated_form_is_correct(separated_form);
     if (potential_error == NO_ERROR) {
         char ONP[LINE_LENGTH];
         separated_form_to_ONP(separated_form, ONP);
-        result = calculate_ONP_val(ONP, NULL, line_number);
+        result = calculate_ONP_val(ONP, NULL, line_number, instruction_tree);
     }
     else {
-        throw_error(potential_error, 0);
+        throw_error(potential_error, 0, instruction_tree, variable_register);
     }
 
     return result;
 }
 
-void expression_to_ONP(char *expression, char *ONP, int line_number) {
+void expression_to_ONP(char *expression, char *ONP, int line_number, instruction_tree_t instruction_tree, variable_register_t variable_register) {
     char result[LINE_LENGTH];
 
-    convert_expression_to_separated_form(result, expression);
+    expression = skip_whitespace(expression);
+
+    if (*expression == '\0')
+        throw_error(NO_EXPRESSION_PROVIDED, line_number, instruction_tree, variable_register);
+
+    convert_expression_to_separated_form(result, expression, instruction_tree, variable_register);
     error_t potential_error = check_if_separated_form_is_correct(result);
     if (potential_error == NO_ERROR) {
         separated_form_to_ONP(result, ONP);
     }
     else {
-        throw_error(potential_error, line_number);
+        throw_error(potential_error, line_number, instruction_tree, variable_register);
     }
 }

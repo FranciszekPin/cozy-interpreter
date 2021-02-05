@@ -1,6 +1,6 @@
 #include "variable_register.h"
 #include "string_operations.h"
-
+#include "error_manager.h"
 
 int get_letter_code(char letter) {
     return letter - 'a';
@@ -21,9 +21,9 @@ bool is_letter_code_proper_for_variable_name(int letter_code) {
     return (letter_code >= 0 && letter_code < NUMBER_OF_LETTERS);
 }
 
-variable_register_t define_variable(variable_register_t variable_register, char *name, int line_number) {
-    if (is_variable_defined(variable_register, name, line_number))
-        throw_error(VARIABLE_DECLARED_TWICE, line_number);
+variable_register_t define_variable(variable_register_t variable_register, char *name, int line_number, instruction_tree_t instruction_tree) {
+    if (is_variable_defined(variable_register, name, line_number, instruction_tree))
+        throw_error(VARIABLE_DECLARED_TWICE, line_number, instruction_tree, variable_register);
 
     node_t *act_node = variable_register;
 
@@ -31,7 +31,7 @@ variable_register_t define_variable(variable_register_t variable_register, char 
         int letter_code = get_letter_code(*name);
 
         if (!is_letter_code_proper_for_variable_name(letter_code)) {
-            throw_error(ILLEGAL_VARIABLE_NAME, line_number);
+            throw_error(ILLEGAL_VARIABLE_NAME, line_number, instruction_tree, variable_register);
         }
 
         if (act_node->next_node[letter_code] == NULL) {
@@ -50,9 +50,9 @@ variable_register_t define_variable(variable_register_t variable_register, char 
     return variable_register;
 }
 
-variable_register_t set_val(variable_register_t variable_register, char *name, int val, int line_number) {
-    if (!is_variable_defined(variable_register, name, line_number))
-        throw_error(ILLEGAL_VARIABLE_NAME, line_number);
+variable_register_t set_val(variable_register_t variable_register, char *name, int val, int line_number, instruction_tree_t instruction_tree) {
+    if (!is_variable_defined(variable_register, name, line_number, instruction_tree))
+        throw_error(ILLEGAL_VARIABLE_NAME, line_number, instruction_tree, variable_register);
 
     node_t *act_node = variable_register;
 
@@ -69,14 +69,14 @@ variable_register_t set_val(variable_register_t variable_register, char *name, i
     return variable_register;
 }
 
-bool is_variable_defined(variable_register_t variable_register, char *name, int line_number) {
+bool is_variable_defined(variable_register_t variable_register, char *name, int line_number, instruction_tree_t instruction_tree) {
     bool result = true;
 
     while (*name != '\0') {
         int letter_code = get_letter_code(*name);
 
         if (!is_letter_code_proper_for_variable_name(letter_code)) {
-            throw_error(ILLEGAL_VARIABLE_NAME, line_number);
+            throw_error(ILLEGAL_VARIABLE_NAME, line_number, instruction_tree, variable_register);
         }
 
         if (variable_register->next_node[letter_code] == NULL) {
@@ -95,9 +95,9 @@ bool is_variable_defined(variable_register_t variable_register, char *name, int 
     return result;
 }
 
-int get_variable_val(variable_register_t variable_register, char *name, int line_number) {
-    if (!is_variable_defined(variable_register, name, line_number)) {
-        throw_error(ILLEGAL_VARIABLE_NAME, line_number);
+int get_variable_val(variable_register_t variable_register, char *name, int line_number, instruction_tree_t instruction_tree) {
+    if (!is_variable_defined(variable_register, name, line_number, instruction_tree)) {
+        throw_error(ILLEGAL_VARIABLE_NAME, line_number, instruction_tree, variable_register);
     }
 
     while (*name != '\0') {

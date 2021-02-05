@@ -6,6 +6,8 @@
 #include <stdbool.h>
 #include "constants.h"
 #include "source_code_reader.h"
+#include "string_operations.h"
+#include "instruction.h"
 
 typedef enum {
     INT,
@@ -26,13 +28,13 @@ node_t * create();
 
 bool is_letter_code_proper_for_variable_name(int letter_code);
 
-variable_register_t define_variable(variable_register_t variable_register, char *name, int line_number);
+variable_register_t define_variable(variable_register_t variable_register, char *name, int line_number, instruction_tree_t instruction_tree);
 
-variable_register_t set_val(variable_register_t variable_register, char *name, int val, int line_number);
+variable_register_t set_val(variable_register_t variable_register, char *name, int val, int line_number, instruction_tree_t instruction_tree);
 
-bool is_variable_defined(variable_register_t variable_register, char *name, int line_number);
+bool is_variable_defined(variable_register_t variable_register, char *name, int line_number, instruction_tree_t instruction_tree);
 
-int get_variable_val(variable_register_t variable_register, char *name, int line_number);
+int get_variable_val(variable_register_t variable_register, char *name, int line_number, instruction_tree_t instruction_tree);
 
 variable_type_t detect_variable_type(char *name);
 

@@ -83,8 +83,8 @@ void test_evaluation() {
     test_expression_to_ONP("a == ( 3 || b ) == 5", "a 3 b || == 5 ==");
 
     variable_register_t variable_register = create();
-    variable_register = define_variable(variable_register, "somevar", 0);
-    variable_register = define_variable(variable_register, "var", 0);
+    variable_register = define_variable(variable_register, "somevar", 0, NULL);
+    variable_register = define_variable(variable_register, "var", 0, NULL);
 
     test_calculate_ONP_val("2 3 +", 5, variable_register);
     test_calculate_ONP_val("2 3 + 7 ||", 1, variable_register);
@@ -115,7 +115,7 @@ void test_skip_whitespace(char *expression, char *expected_val) {
 
 void test_read_lexical_unit(char *expression, char *expected_val) {
     char word[LINE_LENGTH];
-    read_lexical_unit(expression, word);
+    read_lexical_unit(expression, word, NULL, NULL);
 
     run_test("test read_lexical_unit()", test_if_result_equals_expected(word, expected_val));
 }
@@ -139,7 +139,7 @@ void test_remaining_text_read_from_separated_form(char *expression, char *expect
 
 void test_convert_expression_to_separated_form(char *expression, char *expected_val) {
     char separated_form[LINE_LENGTH];
-    convert_expression_to_separated_form(separated_form, expression);
+    convert_expression_to_separated_form(separated_form, expression, NULL, NULL);
     run_test("test convert_expression_to_separated_form()", test_if_result_equals_expected(separated_form, expected_val));
 }
 
@@ -161,11 +161,11 @@ void test_expression_to_ONP(char *expression, char *expected_val) {
 }
 
 void test_calculate_ONP_val(char *ONP_expression, int expected_val, variable_register_t variable_register) {
-    int result = calculate_ONP_val(ONP_expression, variable_register, 0);
+    int result = calculate_ONP_val(ONP_expression, variable_register, 0, NULL);
     run_test("test calculate_ONP_val()", result == expected_val);
 }
 
 void test_evaluate_expression(char *expression, int expected_val) {
-    int result = evaluate_expression(expression, 0);
+    int result = evaluate_expression(expression, 0, NULL, NULL);
     run_test("test evaluate_expression()", result == expected_val);
 }

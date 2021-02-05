@@ -1,5 +1,5 @@
 #include "source_code_reader.h"
-#include "string_operations.h"
+
 #include <stdlib.h>
 #include <stdio.h>
 

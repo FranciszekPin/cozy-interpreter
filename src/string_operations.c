@@ -1,8 +1,3 @@
-//
-// Created by learning-account on 24.01.2021.
-//
-
-#include "error_manager.h"
 #include "stack.h"
 #include <stdlib.h>
 #include <string.h>

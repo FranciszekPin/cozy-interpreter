@@ -62,6 +62,9 @@ instruction_tree_t insert_instruction(instruction_tree_t instruction_tree, instr
 }
 
 instruction_tree_t remove_instruction_tree(instruction_tree_t instruction_tree) {
+    if (instruction_tree == NULL)
+        return NULL;
+
     instruction_tree_t instruction_if_true = instruction_tree->instruction_if_true;
     if (instruction_if_true != NULL)
         instruction_tree->instruction_if_true = remove_instruction_tree(instruction_if_true);

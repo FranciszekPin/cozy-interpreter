@@ -2,7 +2,8 @@
 #include <stdlib.h>
 #include "error_manager.h"
 
-void throw_error(error_t error_type, int line_number) {
+
+void throw_error(error_t error_type, int line_number, instruction_tree_t instruction_tree, variable_register_t variable_register) {
     printf("Error in line %d: ", line_number);
     switch (error_type) {
         case EMPTY_FILE:
@@ -33,15 +34,20 @@ void throw_error(error_t error_type, int line_number) {
             printf("variable is declared second time \n");
             break;
         case READ_FROM_END_OF_FILE:
-            printf("attemp to read end of file\n");
+            printf("atemp to read end of file\n");
             break;
         case WRONG_PROGRAM_STRUCTURE:
             printf("wrong program structure\n");
             break;
+        case NO_EXPRESSION_PROVIDED:
+            printf("no expression provided\n");
+            break;
+
         default: {
             printf("unknown error is thrown\n");
         }
     }
-    //printf("Error: %d\n", error_type);
+    remove_variable_register(variable_register);
+    remove_instruction_tree(instruction_tree);
     exit(error_type);
 }

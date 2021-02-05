@@ -1,6 +1,10 @@
 #ifndef COZY_INTERPRETER_ERROR_MANAGER_H
 #define COZY_INTERPRETER_ERROR_MANAGER_H
 
+#include "instruction.h"
+#include "variable_register.h"
+
+
 typedef enum {
     NO_ERROR,
     INCORRECT_BRACKETS,
@@ -18,9 +22,11 @@ typedef enum {
     UNKNOWN_INSTRUCTION_TYPE,
     VARIABLE_DECLARED_TWICE,
     READ_FROM_END_OF_FILE,
-    WRONG_PROGRAM_STRUCTURE
+    WRONG_PROGRAM_STRUCTURE,
+    NO_EXPRESSION_PROVIDED
 } error_t;
 
-void throw_error(error_t error_type, int line_number);
+
+void throw_error(error_t error_type, int line_number, instruction_tree_t instruction_tree, variable_register_t variable_register);
 
 #endif //COZY_INTERPRETER_ERROR_MANAGER_H

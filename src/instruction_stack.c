@@ -28,8 +28,7 @@ instruction_stack_t instruction_stack_push(instruction_stack_t stack, instructio
     return stack;
 }
 
-instruction_stack_t instruction_stuck_pop(instruction_stack_t stack, instruction_stack_val_t * val) {
-    *val = stack->val;
+instruction_stack_t instruction_stuck_pop(instruction_stack_t stack) {
     instruction_stack_t new_top = stack->next;
     free(stack);
 
@@ -42,4 +41,11 @@ bool instruction_stuck_is_empty(instruction_stack_t stack) {
 
 instruction_stack_val_t instruction_stuck_get_top(instruction_stack_t stack) {
     return stack->val;
+}
+
+instruction_stack_t instruction_stack_clear(instruction_stack_t instruction_stack) {
+    while (!instruction_stuck_is_empty(instruction_stack))
+        instruction_stack = instruction_stuck_pop(instruction_stack);
+
+    return NULL;
 }
