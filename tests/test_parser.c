@@ -13,20 +13,20 @@ void test_parser() {
 
     variable_register_t variableRegister = create();
 
-    load_defined_variables(&source_code, variableRegister);
+    load_defined_variables(&source_code, variableRegister, NULL);
 
-    run_test("test if variable is loaded", is_variable_defined(variableRegister, "a") == true);
-    run_test("test if variable is loaded", get_variable_val(variableRegister, "a") == 0);
-    run_test("test if variable is loaded", is_variable_defined(variableRegister, "ba") == true);
-    run_test("test if variable is loaded", get_variable_val(variableRegister, "ba") == 0);
-    run_test("test if variable is loaded", is_variable_defined(variableRegister, "bc") == true);
-    run_test("test if variable is loaded", get_variable_val(variableRegister, "bc") == 0);
-    run_test("test if variable is loaded", is_variable_defined(variableRegister, "b") == false);
-    run_test("test if variable is loaded", is_variable_defined(variableRegister, "ugh") == false);
+    run_test("test if variable is loaded", is_variable_defined(variableRegister, "a", NULL, NULL) == true);
+    run_test("test if variable is loaded", get_variable_val(variableRegister, "a", NULL, NULL) == 0);
+    run_test("test if variable is loaded", is_variable_defined(variableRegister, "ba", NULL, NULL) == true);
+    run_test("test if variable is loaded", get_variable_val(variableRegister, "ba", NULL, NULL) == 0);
+    run_test("test if variable is loaded", is_variable_defined(variableRegister, "bc", NULL, NULL) == true);
+    run_test("test if variable is loaded", get_variable_val(variableRegister, "bc", NULL, NULL) == 0);
+    run_test("test if variable is loaded", is_variable_defined(variableRegister, "b", NULL, NULL) == false);
+    run_test("test if variable is loaded", is_variable_defined(variableRegister, "ugh", NULL, NULL) == false);
 
     run_test("test if act_line_number is set to program", get_act_line_number(&source_code) == 6);
 
-    instruction_tree_t instruction_tree = parse_program(&source_code);
+    instruction_tree_t instruction_tree = parse_program(&source_code, NULL, variableRegister);
 
     instruction_tree_t start_block = instruction_tree;
     instruction_tree_t first_assigment = instruction_tree->instruction_if_true;

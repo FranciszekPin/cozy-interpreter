@@ -1,12 +1,14 @@
+#include "variable_register.h"
 #include "evaluation.h"
 #include <ctype.h>
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
 #include "stack.h"
+
 #include "error_manager.h"
 #include "string_operations.h"
-#include "variable_register.h"
+
 
 
 bool is_bracket(char c) {

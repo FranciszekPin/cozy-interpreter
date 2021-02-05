@@ -2,6 +2,7 @@
 #include "string_operations.h"
 #include "error_manager.h"
 
+
 int get_letter_code(char letter) {
     return letter - 'a';
 }

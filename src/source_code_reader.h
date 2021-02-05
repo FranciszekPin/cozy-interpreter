@@ -2,8 +2,12 @@
 #define COZY_INTERPRETER_SOURCE_CODE_READER_H
 
 #include <stdbool.h>
+#include "variable_register.h"
 #include "constants.h"
 #include "string_operations.h"
+#include "instruction.h"
+
+
 
 typedef struct {
     char code[MAX_NUMBER_OF_LINES][LINE_LENGTH];
@@ -13,11 +17,11 @@ typedef struct {
 
 void create_source_code_reader(source_code_t * source_code);
 
-char *get_code_line(source_code_t *source_code);
+char *get_code_line(source_code_t *source_code, instruction_tree_t instruction_tree, variable_register_t variable_register);
 
 bool are_lines_to_read(source_code_t *sourceCode);
 
-void skip_empty_lines(source_code_t *source_code);
+void skip_empty_lines(source_code_t *source_code, instruction_tree_t instruction_tree, variable_register_t variable_register);
 
 int get_number_of_lines(source_code_t *sourceCode);
 

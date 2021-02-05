@@ -5,7 +5,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include "constants.h"
-#include "source_code_reader.h"
+
 #include "string_operations.h"
 #include "instruction.h"
 
