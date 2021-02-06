@@ -5,13 +5,13 @@
 
 void load_defined_variables(source_code_t *source_code, variable_register_t variable_register, instruction_tree_t instruction_tree) {
     if (are_lines_to_read(source_code))
-        skip_empty_lines(source_code);
+        skip_empty_lines(source_code, instruction_tree, variable_register);
 
     if (!are_lines_to_read(source_code)) {
         throw_error(EMPTY_FILE, get_act_line_number(source_code) + 1, instruction_tree, variable_register);
     }
 
-    char *act_line = get_code_line(source_code);
+    char *act_line = get_code_line(source_code, instruction_tree, variable_register);
     char word[LINE_LENGTH];
     act_line = read_first_word_after_whitespace(act_line, word);
 
@@ -28,8 +28,8 @@ void load_defined_variables(source_code_t *source_code, variable_register_t vari
 
     move_to_next_line(source_code);
     if (are_lines_to_read(source_code)) {
-        skip_empty_lines(source_code);
-        read_first_word_after_whitespace(get_code_line(source_code), word);
+        skip_empty_lines(source_code, instruction_tree, variable_register);
+        read_first_word_after_whitespace(get_code_line(source_code, instruction_tree, variable_register), word);
     }
 
     while (are_lines_to_read(source_code) && !equal("program:", word)) {
@@ -38,13 +38,13 @@ void load_defined_variables(source_code_t *source_code, variable_register_t vari
         move_to_next_line(source_code);
 
         if (are_lines_to_read(source_code)) {
-            skip_empty_lines(source_code);
-            read_first_word_after_whitespace(get_code_line(source_code), word);
+            skip_empty_lines(source_code, instruction_tree, variable_register);
+            read_first_word_after_whitespace(get_code_line(source_code, instruction_tree, variable_register), word);
         }
     }
 
     if (are_lines_to_read(source_code)) {
-        act_line = read_first_word_after_whitespace(get_code_line(source_code), word);
+        act_line = read_first_word_after_whitespace(get_code_line(source_code, instruction_tree, variable_register), word);
         if (equal("program:", word) && *act_line != '\n' && *act_line != '\0') {
             throw_error(NO_NEW_LINE_AFTER_CLAUSE, get_act_line_number(source_code) + 1, instruction_tree, variable_register);
 
@@ -53,11 +53,11 @@ void load_defined_variables(source_code_t *source_code, variable_register_t vari
 
     move_to_next_line(source_code);
     if (are_lines_to_read(source_code))
-        skip_empty_lines(source_code);
+        skip_empty_lines(source_code, instruction_tree, variable_register);
 }
 
 void load_variable(source_code_t *source_code, variable_register_t variable_register, instruction_tree_t instruction_tree) {
-    char *act_line = get_code_line(source_code);
+    char *act_line = get_code_line(source_code, instruction_tree, variable_register);
     char word[LINE_LENGTH];
     act_line = read_first_word_after_whitespace(act_line, word);
     variable_type_t variable_type = detect_variable_type(word);
@@ -89,11 +89,11 @@ instruction_tree_t parse_program(source_code_t *source_code, instruction_tree_t 
 
     char *line;
     if (are_lines_to_read(source_code))
-        skip_empty_lines(source_code);
+        skip_empty_lines(source_code, instruction_tree, variable_register);
     while (are_lines_to_read(source_code)) {
 
         char word[LINE_LENGTH];
-        line = get_code_line(source_code);
+        line = get_code_line(source_code, instruction_tree, variable_register);
         line = read_first_word_after_whitespace(line, word);
         upper_instruction->instruction_if_true;
         type_of_instruction_t type_of_instruction = detect_type_of_instruction(word);
@@ -188,7 +188,7 @@ instruction_tree_t parse_program(source_code_t *source_code, instruction_tree_t 
 
         move_to_next_line(source_code);
         if (are_lines_to_read(source_code))
-            skip_empty_lines(source_code);
+            skip_empty_lines(source_code, instruction_tree, variable_register);
     }
 
     if (!instruction_stuck_is_empty(instruction_stack)) {
