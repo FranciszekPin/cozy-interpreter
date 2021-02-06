@@ -32,6 +32,8 @@ variable_register_t define_variable(variable_register_t variable_register, char 
 
 variable_register_t set_val(variable_register_t variable_register, char *name, int val, int line_number, instruction_tree_t instruction_tree);
 
+bool is_variable_name_forbidden(char *name);
+
 bool is_variable_defined(variable_register_t variable_register, char *name, int line_number, instruction_tree_t instruction_tree);
 
 int get_variable_val(variable_register_t variable_register, char *name, int line_number, instruction_tree_t instruction_tree);

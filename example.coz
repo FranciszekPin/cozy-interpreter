@@ -1,18 +1,8 @@
 define:
-    int c
-    int ga
-    int res
+    a
 
 
 program:
-    c = 10
-    while c > 0
-        printVar c
-        c = c-1
-    end
-    if c == 0
-
-    else
-    else
-
-    if sth
+    a = 20
+    a = a % 7
+    printVar a

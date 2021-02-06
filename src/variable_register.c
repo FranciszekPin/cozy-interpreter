@@ -22,7 +22,18 @@ bool is_letter_code_proper_for_variable_name(int letter_code) {
     return (letter_code >= 0 && letter_code < NUMBER_OF_LETTERS);
 }
 
-variable_register_t define_variable(variable_register_t variable_register, char *name, int line_number, instruction_tree_t instruction_tree) {
+bool is_variable_name_forbidden(char *name) {
+    bool result = false;
+    if (equal(name, "if") || equal(name, "while") || equal(name, "end") || equal(name, "printVar") ||
+        equal(name, "printStr") || equal(name, "read") || equal(name, "else")) {
+        result = true;
+    }
+
+    return result;
+}
+
+variable_register_t define_variable(variable_register_t variable_register, char *name, int line_number,
+                                    instruction_tree_t instruction_tree) {
     if (is_variable_defined(variable_register, name, line_number, instruction_tree))
         throw_error(VARIABLE_DECLARED_TWICE, line_number, instruction_tree, variable_register);
 
@@ -51,9 +62,10 @@ variable_register_t define_variable(variable_register_t variable_register, char 
     return variable_register;
 }
 
-variable_register_t set_val(variable_register_t variable_register, char *name, int val, int line_number, instruction_tree_t instruction_tree) {
+variable_register_t set_val(variable_register_t variable_register, char *name, int val, int line_number,
+                            instruction_tree_t instruction_tree) {
     if (!is_variable_defined(variable_register, name, line_number, instruction_tree))
-        throw_error(ILLEGAL_VARIABLE_NAME, line_number, instruction_tree, variable_register);
+        throw_error(UNDEFINED_VARIABLE, line_number, instruction_tree, variable_register);
 
     node_t *act_node = variable_register;
 
@@ -70,7 +82,8 @@ variable_register_t set_val(variable_register_t variable_register, char *name, i
     return variable_register;
 }
 
-bool is_variable_defined(variable_register_t variable_register, char *name, int line_number, instruction_tree_t instruction_tree) {
+bool is_variable_defined(variable_register_t variable_register, char *name, int line_number,
+                         instruction_tree_t instruction_tree) {
     bool result = true;
 
     while (*name != '\0') {
@@ -96,9 +109,10 @@ bool is_variable_defined(variable_register_t variable_register, char *name, int 
     return result;
 }
 
-int get_variable_val(variable_register_t variable_register, char *name, int line_number, instruction_tree_t instruction_tree) {
+int get_variable_val(variable_register_t variable_register, char *name, int line_number,
+                     instruction_tree_t instruction_tree) {
     if (!is_variable_defined(variable_register, name, line_number, instruction_tree)) {
-        throw_error(ILLEGAL_VARIABLE_NAME, line_number, instruction_tree, variable_register);
+        throw_error(UNDEFINED_VARIABLE, line_number, instruction_tree, variable_register);
     }
 
     while (*name != '\0') {

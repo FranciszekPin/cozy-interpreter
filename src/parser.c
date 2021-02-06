@@ -2,8 +2,8 @@
 #include "parser.h"
 
 
-
-void load_defined_variables(source_code_t *source_code, variable_register_t variable_register, instruction_tree_t instruction_tree) {
+void load_defined_variables(source_code_t *source_code, variable_register_t variable_register,
+                            instruction_tree_t instruction_tree) {
     if (are_lines_to_read(source_code))
         skip_empty_lines(source_code, instruction_tree, variable_register);
 
@@ -23,7 +23,8 @@ void load_defined_variables(source_code_t *source_code, variable_register_t vari
     }
 
     if (*act_line != '\n' && *act_line != '\0') {
-        throw_error(NO_NEW_LINE_AFTER_CLAUSE, get_act_line_number(source_code) + 1, instruction_tree, variable_register);
+        throw_error(NO_NEW_LINE_AFTER_CLAUSE, get_act_line_number(source_code) + 1, instruction_tree,
+                    variable_register);
     }
 
     move_to_next_line(source_code);
@@ -44,9 +45,11 @@ void load_defined_variables(source_code_t *source_code, variable_register_t vari
     }
 
     if (are_lines_to_read(source_code)) {
-        act_line = read_first_word_after_whitespace(get_code_line(source_code, instruction_tree, variable_register), word);
+        act_line = read_first_word_after_whitespace(get_code_line(source_code, instruction_tree, variable_register),
+                                                    word);
         if (equal("program:", word) && *act_line != '\n' && *act_line != '\0') {
-            throw_error(NO_NEW_LINE_AFTER_CLAUSE, get_act_line_number(source_code) + 1, instruction_tree, variable_register);
+            throw_error(NO_NEW_LINE_AFTER_CLAUSE, get_act_line_number(source_code) + 1, instruction_tree,
+                        variable_register);
 
         }
     }
@@ -56,19 +59,25 @@ void load_defined_variables(source_code_t *source_code, variable_register_t vari
         skip_empty_lines(source_code, instruction_tree, variable_register);
 }
 
-void load_variable(source_code_t *source_code, variable_register_t variable_register, instruction_tree_t instruction_tree) {
+void
+load_variable(source_code_t *source_code, variable_register_t variable_register, instruction_tree_t instruction_tree) {
     char *act_line = get_code_line(source_code, instruction_tree, variable_register);
     char word[LINE_LENGTH];
     act_line = read_first_word_after_whitespace(act_line, word);
     variable_type_t variable_type = detect_variable_type(word);
 
     if (variable_type == NOT_A_TYPE) {
-        throw_error(WRONG_VARIABLE_TYPE_NAME, get_act_line_number(source_code) + 1, instruction_tree, variable_register);
+        throw_error(WRONG_VARIABLE_TYPE_NAME, get_act_line_number(source_code) + 1, instruction_tree,
+                    variable_register);
     }
 
     act_line = read_first_word_after_whitespace(act_line, word);
 
-    variable_register = define_variable(variable_register, word, get_act_line_number(source_code) + 1, instruction_tree);
+    if (is_variable_name_forbidden(word))
+        throw_error(ILLEGAL_VARIABLE_NAME, get_act_line_number(source_code) + 1, instruction_tree, variable_register);
+
+    variable_register = define_variable(variable_register, word, get_act_line_number(source_code) + 1,
+                                        instruction_tree);
 }
 
 void add_with_respect_if(instruction_tree_t upper_instruction, instruction_tree_t instruction, bool is_in_true) {
@@ -81,7 +90,8 @@ void add_with_respect_if(instruction_tree_t upper_instruction, instruction_tree_
                 instruction);
 }
 
-instruction_tree_t parse_program(source_code_t *source_code, instruction_tree_t instruction_tree, variable_register_t variable_register) {
+instruction_tree_t
+parse_program(source_code_t *source_code, instruction_tree_t instruction_tree, variable_register_t variable_register) {
     instruction_tree_t upper_instruction = create_instruction(START_PROGRAM, NULL, "", 0);
     instruction_tree_t root = upper_instruction;
 
@@ -91,7 +101,6 @@ instruction_tree_t parse_program(source_code_t *source_code, instruction_tree_t 
     if (are_lines_to_read(source_code))
         skip_empty_lines(source_code, instruction_tree, variable_register);
     while (are_lines_to_read(source_code)) {
-
         char word[LINE_LENGTH];
         line = get_code_line(source_code, instruction_tree, variable_register);
         line = read_first_word_after_whitespace(line, word);
@@ -104,7 +113,8 @@ instruction_tree_t parse_program(source_code_t *source_code, instruction_tree_t 
                 line = read_first_word_after_whitespace(line, word);
 
                 if (!equal(word, "=")) {
-                    throw_error(WRONG_ASSIGNMENT_EXPRESSION, get_act_line_number(source_code) + 1, instruction_tree, variable_register);
+                    throw_error(WRONG_ASSIGNMENT_EXPRESSION, get_act_line_number(source_code) + 1, instruction_tree,
+                                variable_register);
                 }
                 char ONP[LINE_LENGTH];
                 expression_to_ONP(line, ONP, get_act_line_number(source_code) + 1, instruction_tree, variable_register);
@@ -130,7 +140,8 @@ instruction_tree_t parse_program(source_code_t *source_code, instruction_tree_t 
                 if (instruction_stuck_is_empty(instruction_stack) ||
                     instruction_stuck_get_top(instruction_stack) != IF) {
                     instruction_stack = instruction_stack_clear(instruction_stack);
-                    throw_error(WRONG_PROGRAM_STRUCTURE, get_act_line_number(source_code) + 1, instruction_tree, variable_register);
+                    throw_error(WRONG_PROGRAM_STRUCTURE, get_act_line_number(source_code) + 1, instruction_tree,
+                                variable_register);
                 }
 
                 instruction_stack = instruction_stuck_pop(instruction_stack);
@@ -143,7 +154,8 @@ instruction_tree_t parse_program(source_code_t *source_code, instruction_tree_t 
             case END: {
                 upper_instruction = upper_instruction->upper_instruction;
                 if (instruction_stuck_is_empty(instruction_stack)) {
-                    throw_error(WRONG_PROGRAM_STRUCTURE, get_act_line_number(source_code) + 1, instruction_tree, variable_register);
+                    throw_error(WRONG_PROGRAM_STRUCTURE, get_act_line_number(source_code) + 1, instruction_tree,
+                                variable_register);
                 }
 
                 instruction_stack = instruction_stuck_pop(instruction_stack);

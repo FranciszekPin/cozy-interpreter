@@ -3,7 +3,8 @@
 #include "error_manager.h"
 
 
-void throw_error(error_t error_type, int line_number, instruction_tree_t instruction_tree, variable_register_t variable_register) {
+void throw_error(error_t error_type, int line_number, instruction_tree_t instruction_tree,
+                 variable_register_t variable_register) {
     printf("Error in line %d: ", line_number);
     switch (error_type) {
         case EMPTY_FILE:
@@ -25,7 +26,7 @@ void throw_error(error_t error_type, int line_number, instruction_tree_t instruc
             printf("wrong instruction type is passed\n");
             break;
         case ILLEGAL_VARIABLE_NAME:
-            printf("variable with given name does not exist \n");
+            printf("variable can not be defined with this name\n");
             break;
         case ILLEGAL_EXPRESSION_FORM:
             printf("expression format is wrong \n");
@@ -41,6 +42,12 @@ void throw_error(error_t error_type, int line_number, instruction_tree_t instruc
             break;
         case NO_EXPRESSION_PROVIDED:
             printf("no expression provided\n");
+            break;
+        case WRONG_OPERATOR_USAGE:
+            printf("operator is used in wrong way\n");
+            break;
+        case UNDEFINED_VARIABLE:
+            printf("variable with given name is undefined\n");
             break;
 
         default: {
