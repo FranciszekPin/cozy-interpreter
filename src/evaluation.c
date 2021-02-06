@@ -54,7 +54,7 @@ lexical_unit_t detect_to_which_lexical_unit_string_belongs(char *lexical_unit) {
 
     if (first_character == '=' || first_character == '<' || first_character == '>' || first_character == '!' ||
         first_character == '+' || first_character == '-' || first_character == '*' || first_character == '/' ||
-        first_character == '|' || first_character == '&')
+        first_character == '|' || first_character == '&' || first_character == '%')
         return OPERATOR;
 
     if (first_character == '(')
