@@ -4,10 +4,11 @@ define:
     int prime
 
 program:
+    printStr give me number and I will told you if it is prime:
     read n
 
     if (n == 1) || (n == 0)
-        printStr numberIsNotPrime
+        printStr your number is not prime
     else
         prime = 1
         i = 2
@@ -19,9 +20,9 @@ program:
         end
 
         if prime == 1
-            printStr numberIsPrime
+            printStr your number is prime
         else
-            printStr numberIsNotPrime
+            printStr your number is not prime
         end
     end
 

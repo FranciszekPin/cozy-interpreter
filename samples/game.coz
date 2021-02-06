@@ -1,0 +1,34 @@
+define:
+    int number
+    int isNumberGuessed
+    int numberOfAttempts
+    int playerGuess
+
+program:
+
+    printStr Let's play simple game:
+
+    number = 73
+    numberOfAttempts = 0
+    isNumberGuessed = 0
+
+    while isNumberGuessed == 0
+        printStr Try to guess:
+        read playerGuess
+
+        if playerGuess > number
+            printStr Your number is too big
+        else
+            if playerGuess < number
+                printStr Your number is too small
+            else
+                isNumberGuessed = 1
+            end
+        end
+
+        numberOfAttempts = numberOfAttempts+1
+    end
+
+    printStr Congratulations! You guessed.
+    printStr Number of attempts:
+    printVar numberOfAttempts

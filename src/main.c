@@ -8,7 +8,7 @@
 #include "../tests/run_tests.h"
 
 int main(int argc, char **argv) {
-
+    //run_tests();
     if (argc == 1) {
         printf("No file name provided\n");
     }

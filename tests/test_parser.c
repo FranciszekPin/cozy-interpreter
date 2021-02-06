@@ -15,14 +15,20 @@ void test_parser() {
 
     load_defined_variables(&source_code, variableRegister, NULL);
 
-    run_test("test if variable is loaded", is_variable_defined(variableRegister, "a", NULL, NULL) == true);
-    run_test("test if variable is loaded", get_variable_val(variableRegister, "a", NULL, NULL) == 0);
-    run_test("test if variable is loaded", is_variable_defined(variableRegister, "ba", NULL, NULL) == true);
-    run_test("test if variable is loaded", get_variable_val(variableRegister, "ba", NULL, NULL) == 0);
-    run_test("test if variable is loaded", is_variable_defined(variableRegister, "bc", NULL, NULL) == true);
-    run_test("test if variable is loaded", get_variable_val(variableRegister, "bc", NULL, NULL) == 0);
-    run_test("test if variable is loaded", is_variable_defined(variableRegister, "b", NULL, NULL) == false);
-    run_test("test if variable is loaded", is_variable_defined(variableRegister, "ugh", NULL, NULL) == false);
+    char a[] = "a";
+    char ba[] = "ba";
+    char bc[] = "bc";
+    char b[] = "b";
+    char ugh[] = "ugh";
+
+    run_test("test if variable is loaded", is_variable_defined(variableRegister, a, NULL, NULL) == true);
+    run_test("test if variable is loaded", get_variable_val(variableRegister, a, NULL, NULL) == 0);
+    run_test("test if variable is loaded", is_variable_defined(variableRegister, ba, NULL, NULL) == true);
+    run_test("test if variable is loaded", get_variable_val(variableRegister, ba, NULL, NULL) == 0);
+    run_test("test if variable is loaded", is_variable_defined(variableRegister, bc, NULL, NULL) == true);
+    run_test("test if variable is loaded", get_variable_val(variableRegister, bc, NULL, NULL) == 0);
+    run_test("test if variable is loaded", is_variable_defined(variableRegister, b, NULL, NULL) == false);
+    run_test("test if variable is loaded", is_variable_defined(variableRegister, ugh, NULL, NULL) == false);
 
     run_test("test if act_line_number is set to program", get_act_line_number(&source_code) == 6);
 

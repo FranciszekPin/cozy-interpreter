@@ -83,8 +83,10 @@ void test_evaluation() {
     test_expression_to_ONP("a == ( 3 || b ) == 5", "a 3 b || == 5 ==");
 
     variable_register_t variable_register = create();
-    variable_register = define_variable(variable_register, "somevar", 0, NULL);
-    variable_register = define_variable(variable_register, "var", 0, NULL);
+    char var[] = "somevar";
+    variable_register = define_variable(variable_register, var, 0, NULL);
+    char var2[] = "another";
+    variable_register = define_variable(variable_register, var2, 0, NULL);
 
     test_calculate_ONP_val("2 3 +", 5, variable_register);
     test_calculate_ONP_val("2 3 + 7 ||", 1, variable_register);
