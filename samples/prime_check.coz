@@ -1,0 +1,31 @@
+define:
+    int n
+    int i
+    int prime
+
+
+program:
+    n = &
+    printStr numberToCheck
+    read n
+
+    if (n == 1) || (n == 0)
+        printStr numberIsNotPrime
+    else
+        prime = 1
+        i = 2
+        while i*i <= n
+            if n % i == 0
+                prime = 0
+            end
+            i = i+1
+        end
+
+        if prime == 1
+            printStr numberIsPrime
+        else
+            printStr numberIsNotPrime
+        end
+    end
+
+
