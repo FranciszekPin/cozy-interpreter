@@ -173,8 +173,7 @@ parse_program(source_code_t *source_code, instruction_tree_t instruction_tree, v
             }
                 break;
 
-            case PRINT_VARIABLE:
-            case PRINT_STRING: {
+            case PRINT_VARIABLE: {
                 char ONP[LINE_LENGTH];
                 expression_to_ONP(line, ONP, get_act_line_number(source_code) + 1, instruction_tree, variable_register);
                 instruction_tree_t instruction = create_instruction(type_of_instruction, upper_instruction, ONP,
@@ -182,6 +181,13 @@ parse_program(source_code_t *source_code, instruction_tree_t instruction_tree, v
                 add_with_respect_if(upper_instruction, instruction, upper_instruction->in_instruction_if_true);
             }
                 break;
+
+            case PRINT_STRING: {
+                instruction_tree_t instruction = create_instruction(type_of_instruction, upper_instruction, line,
+                                                                    get_act_line_number(source_code) + 1);
+                add_with_respect_if(upper_instruction, instruction, upper_instruction->in_instruction_if_true);
+            }
+            break;
 
 
             case READ: {
