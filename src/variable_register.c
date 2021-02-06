@@ -24,6 +24,7 @@ bool is_letter_code_proper_for_variable_name(int letter_code) {
 
 bool is_variable_name_forbidden(char *name) {
     bool result = false;
+    lower_word(name);
     if (equal(name, "if") || equal(name, "while") || equal(name, "end") || equal(name, "printVar") ||
         equal(name, "printStr") || equal(name, "read") || equal(name, "else")) {
         result = true;
@@ -34,6 +35,7 @@ bool is_variable_name_forbidden(char *name) {
 
 variable_register_t define_variable(variable_register_t variable_register, char *name, int line_number,
                                     instruction_tree_t instruction_tree) {
+    lower_word(name);
     if (is_variable_defined(variable_register, name, line_number, instruction_tree))
         throw_error(VARIABLE_DECLARED_TWICE, line_number, instruction_tree, variable_register);
 
@@ -64,6 +66,7 @@ variable_register_t define_variable(variable_register_t variable_register, char 
 
 variable_register_t set_val(variable_register_t variable_register, char *name, int val, int line_number,
                             instruction_tree_t instruction_tree) {
+    lower_word(name);
     if (!is_variable_defined(variable_register, name, line_number, instruction_tree))
         throw_error(UNDEFINED_VARIABLE, line_number, instruction_tree, variable_register);
 
@@ -84,6 +87,7 @@ variable_register_t set_val(variable_register_t variable_register, char *name, i
 
 bool is_variable_defined(variable_register_t variable_register, char *name, int line_number,
                          instruction_tree_t instruction_tree) {
+    lower_word(name);
     bool result = true;
 
     while (*name != '\0') {
@@ -111,6 +115,7 @@ bool is_variable_defined(variable_register_t variable_register, char *name, int 
 
 int get_variable_val(variable_register_t variable_register, char *name, int line_number,
                      instruction_tree_t instruction_tree) {
+    lower_word(name);
     if (!is_variable_defined(variable_register, name, line_number, instruction_tree)) {
         throw_error(UNDEFINED_VARIABLE, line_number, instruction_tree, variable_register);
     }

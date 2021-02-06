@@ -39,3 +39,10 @@ char *read_first_word_after_whitespace(char *text, char *word) {
 
     return text;
 }
+
+void lower_word(char *word) {
+    while (*word != '\0') {
+        *word = tolower(*word);
+        word++;
+    }
+}
