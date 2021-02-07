@@ -1,9 +1,6 @@
 #include "source_code_reader.h"
-
 #include <stdlib.h>
 #include <stdio.h>
-
-
 #include "instruction.h"
 #include "error_manager.h"
 
@@ -23,12 +20,32 @@ void load_source_code(char *file_name, source_code_t* source_code) {
     }
 
     int line_number = 0;
-    while (fgets(source_code->code[line_number], LINE_LENGTH, file))
+    while (read_line(source_code->code[line_number], file, line_number))
         line_number++;
 
     source_code->number_of_lines = line_number;
 
     fclose(file);
+}
+
+bool read_line(char *destination, FILE * file, int line_number) {
+    int n = 0;
+    int c;
+    while ((c = fgetc(file)) != EOF && (c != '\n'))
+    {
+        if (n == CHARACTER_LIMIT) {
+            throw_error(TOO_LONG_LINE, line_number+1, NULL, NULL);
+        }
+        destination[n++] = (char) c;
+    }
+
+    destination[n] = '\0';
+
+    bool result = true;
+    if (c == EOF && n == 0)
+        result = false;
+
+    return result;
 }
 
 char *get_code_line(source_code_t *source_code, instruction_tree_t instruction_tree, variable_register_t variable_register) {

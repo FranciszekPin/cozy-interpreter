@@ -49,6 +49,9 @@ void throw_error(error_t error_type, int line_number, instruction_tree_t instruc
         case UNDEFINED_VARIABLE:
             printf("variable with given name is undefined\n");
             break;
+        case TOO_LONG_LINE:
+            printf("max line length is %d characters\n", CHARACTER_LIMIT);
+            break;
 
         default: {
             printf("unknown error is thrown\n");

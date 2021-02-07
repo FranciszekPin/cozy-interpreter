@@ -25,6 +25,8 @@ void skip_empty_lines(source_code_t *source_code, instruction_tree_t instruction
 
 int get_number_of_lines(source_code_t *sourceCode);
 
+bool read_line(char *destination, FILE * file, int line_number);
+
 int get_act_line_number(source_code_t *source_code);
 
 void move_to_next_line(source_code_t *source_code);
