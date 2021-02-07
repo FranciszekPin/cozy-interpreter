@@ -1,7 +1,7 @@
 OBJ = error_manager.o evaluation.o instruction.o instruction_stack.o main.o parser.o program_runner.o source_code_reader.o stack.o string_operations.o variable_register.o
 
 ci : $(OBJ)
-	$(CC) -o ../ci $(OBJ)
+	$(CC) -o ci $(OBJ)
 
 error_manager.o: error_manager.c error_manager.h instruction.h \
  constants.h variable_register.h string_operations.h
