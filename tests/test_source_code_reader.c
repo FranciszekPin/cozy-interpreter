@@ -16,13 +16,13 @@ void test_read_source_code() {
 
     run_test("test checking number of lines", get_number_of_lines(&source_code) == 7);
 
-    run_test("test reading from file line 0", equal(get_code_line(&source_code, NULL, NULL), "some\n"));
+    run_test("test reading from file line 0", equal(get_code_line(&source_code, NULL, NULL), "some"));
     move_to_next_line(&source_code);
-    run_test("test reading from file line 1", equal(source_code.code[1], "    random\n"));
+    run_test("test reading from file line 1", equal(source_code.code[1], "    random"));
     move_to_next_line(&source_code);
-    run_test("test reading from file line 2", equal(source_code.code[2], "    test\n"));
+    run_test("test reading from file line 2", equal(source_code.code[2], "    test"));
     move_to_next_line(&source_code);
-    run_test("test reading from file line 3", equal(get_code_line(&source_code, NULL, NULL), "    here.\n"));
+    run_test("test reading from file line 3", equal(get_code_line(&source_code, NULL, NULL), "    here."));
 
     run_test("test if there are lines to read", are_lines_to_read(&source_code) == true);
 
