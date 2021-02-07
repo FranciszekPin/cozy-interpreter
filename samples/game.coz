@@ -6,7 +6,8 @@ define:
 
 program:
 
-    printStr Let's play simple game:
+    printStr Let's play simple game: I thought about some number
+    printStr between 1 and 100 and your task is to guess my number
 
     number = 73
     numberOfAttempts = 0

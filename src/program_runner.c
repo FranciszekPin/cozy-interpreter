@@ -31,7 +31,7 @@ void run_program(instruction_tree_t instruction_root, instruction_tree_t instruc
             break;
 
         case PRINT_STRING: {
-            printf("%s", act_instruction->ONP_expression);
+            printf("%s\n", act_instruction->ONP_expression);
 
         }
             break;
