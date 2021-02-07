@@ -140,6 +140,9 @@ variable_type_t detect_variable_type(char *name) {
 }
 
 variable_register_t remove_variable_register(variable_register_t variable_register) {
+    if (variable_register == NULL)
+        return NULL;
+
     for (int i = 0; i < NUMBER_OF_LETTERS; i++) {
         if (variable_register->next_node[i] != NULL)
             variable_register->next_node[i] = remove_variable_register(variable_register->next_node[i]);
