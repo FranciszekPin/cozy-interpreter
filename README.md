@@ -8,7 +8,7 @@ These instructions will get you a copy of the project up and running on your loc
 
 ### Prerequisites
 
-To compile cozy interpreter you need `gcc` compiler and `make`. 
+To compile cozy interpreter you need `cc` compiler and `make`. 
 
 ### Installing
 
@@ -26,7 +26,7 @@ make
 make clear
 ```
 
-In `/src` directory you should obtain `ci` program. To run interpreter just type:
+In `/src` directory you should obtain `ci` program. To run interpreter type:
 
 ```
 ./ci path_to_your_source_code_file.coz
@@ -38,13 +38,9 @@ In `/src` directory you should obtain `ci` program. To run interpreter just type
 ./ci ../samples/game.coz
 ```
 
-## Running the tests
-
-`tests/` directory contains tests for each module. If you want to run them, add `run_test()` at the beginning of `main()` function in `src/main.c`. Yes, I know the testing system is a little primitive, I'm planning to make it better.
-
 ## Cozy Language syntax
 
-Every Cozy language source code should contain `program:` clause containing instruction to run and may contain `define:` clause where variables can be defined.
+Every Cozy language source code should contain `program:` clause with instructions to run and **may** contain `define:` clause where variables can be defined.
 Example of simple source code:
 
 ```
@@ -76,7 +72,9 @@ program:
 ```
 
 Variables should be defined with `int` keyword each in new line.
-For now, there is no other types supported. Look at two examples of wrong variable declaration:
+They are interpreted as integer type variables.
+For now, there is no other type supported. 
+Look at two examples of wrong variable declaration:
 
 ```
 define:
@@ -121,7 +119,7 @@ Syntax of assigning value to variable:
 variable-name = expression
 ```
 
-Assigning value works in similar way to C, but note that there are spaces required before and af after '=' characters.
+Assigning value works in similar way to C, but note that there are spaces required before and after '=' characters.
 Also chaining assignments is impossible.
 See examples of wrong syntax below to better understand:
 

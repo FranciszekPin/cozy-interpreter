@@ -1,8 +1,0 @@
-define:
-    a
-
-
-program:
-    a = 20
-    a = a % 7
-    printVar a
