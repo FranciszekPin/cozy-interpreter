@@ -1,18 +1,18 @@
 # Cozy Interpreter
 
-Interpreter of simple structural language defined below
+Interpreter of Cozy - a simple structural language, created for learning purposes.
 
 ## Getting Started
 
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
+Instructions of installation are made for Linux like systems.
 
 ### Prerequisites
 
-To compile cozy interpreter you need `cc` compiler and `make`. 
+To compile Cozy interpreter you need `cc` compiler and `make`. 
 
 ### Installing
 
-Clone cozy interpreter repo
+Clone Cozy interpreter repo
 
 ```
 git clone https://github.com/FranciszekPin/cozy-interpreter
@@ -40,6 +40,8 @@ In `/src` directory you should obtain `ci` program. To run interpreter type:
 
 ## Cozy Language syntax
 
+Brief description of all language features. In samples/ directory there are examples of source code files written in cozy.
+
 Every Cozy language source code should contain `program:` clause with instructions to run and **may** contain `define:` clause where variables can be defined.
 Example of simple source code:
 
@@ -60,9 +62,11 @@ should produce output:
 Assignment works.
 ```
 
-As you see, the separation character is new line character. Indentation is not required, but increases readability.
+The newline character plays the role of instruction separator. 
+Indentation is not required but increases readability.
 However, there can not be any instruction in the same line with `define:` or `program:` clause.
-Also remember to put every instruction in new line. Examples of **wrong** syntax:
+Also, remember to put every instruction in a new line. 
+Examples of the **wrong** syntax:
 
 ```
 define: int var
@@ -113,14 +117,14 @@ Available operators are: `+ - / * % && || == != <= >= < >`. Examples of legal ex
 
 ### Assignment
 
-Syntax of assigning value to variable:
+Syntax of assigning value to a variable:
 
 ```
 variable-name = expression
 ```
 
-Assigning value works in similar way to C, but note that there are spaces required before and after '=' characters.
-Also chaining assignments is impossible.
+Assigning value works similarly to C, but note that there are spaces required before and after '=' characters.
+Also, chaining assignments is impossible.
 See examples of wrong syntax below to better understand:
 
 ```
@@ -132,13 +136,13 @@ var = another = 11
 ### printVar instruction
 
 `printVar variableName` will print variableName value with adding automatically newline character.
-Note, that using expressions in `printVar` forbidden. Example of wrong use of `printVar`:
+Note, that using expressions in `printVar` is forbidden. Example of wrong use of `printVar`:
 
 ```
 printVar a*10
 ```
 
-instead you have to calculate expression at first:
+instead, you have to calculate expression at first:
 
 ```
 a = a*10
@@ -147,7 +151,7 @@ printVar a
 
 ### printStr instruction
 
-`printStr` works in similar way to `printVar`, but it prints given string instead of variable. For example:
+`printStr` works similarly to `printVar`, but it prints given string instead of variable. For example:
 ```
 printStr Hello world!
 ```
@@ -184,7 +188,7 @@ else
 end
 ```
 
-### while instruction
+### While instruction
 
 syntax of while instruction:
 
@@ -206,24 +210,3 @@ while n > 10
 end
 ```
 
-## Modules
-
-* source_code_reader
-    * `load_source_code()` - loads source code from file to program's data structure 
-
-* parser:
-    * `load_defined_variables()` - loads variable to variable register
-    * `parse_program()` - generates instruction tree
-    
-* program_runner
-    * `run_program()` - interprets instruction tree parsed by parser
-    
-* variable_register
-    * `define_variable()` - defines variable with given name
-    * `get/set _variable_val()` - gets/sets variable value with given name
-    
-* error_manager
-    * `throw_error()` - prints proper error message and terminates interpreting
-    
-* evaluation
-    * `evaluate_expression()` - return expression's value
