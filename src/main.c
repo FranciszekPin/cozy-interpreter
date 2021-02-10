@@ -22,6 +22,7 @@ int main(int argc, char **argv) {
         load_defined_variables(&source_code, variable_register, instruction_tree);
         instruction_tree = parse_program(&source_code, instruction_tree, variable_register);
 
+        run_program(instruction_tree, variable_register);
 
         remove_variable_register(variable_register);
         remove_instruction_tree(instruction_tree);

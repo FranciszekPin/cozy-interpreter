@@ -12,7 +12,7 @@ void test_program_runner() {
     load_defined_variables(&source_code, variableRegister, instruction_tree);
     instruction_tree = parse_program(&source_code, instruction_tree, variableRegister);
 
-    run_program(instruction_tree, instruction_tree, variableRegister);
+    run_subprogram(instruction_tree, instruction_tree, variableRegister);
 
     remove_variable_register(variableRegister);
     remove_instruction_tree(instruction_tree);

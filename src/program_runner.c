@@ -1,7 +1,11 @@
 #include "program_runner.h"
 
+void run_program(instruction_tree_t instruction_tree, variable_register_t variableRegister) {
+    run_subprogram(instruction_tree, instruction_tree, variableRegister);
+}
 
-void run_program(instruction_tree_t instruction_root, instruction_tree_t instruction_tree, variable_register_t variableRegister) {
+void run_subprogram(instruction_tree_t instruction_root, instruction_tree_t instruction_tree,
+                    variable_register_t variableRegister) {
     if (instruction_tree == NULL)
         return;
 
@@ -11,7 +15,7 @@ void run_program(instruction_tree_t instruction_root, instruction_tree_t instruc
 
     switch (type_of_instruction) {
         case START_PROGRAM: {
-            run_program(instruction_root, instruction_tree->instruction_if_true, variableRegister);
+            run_subprogram(instruction_root, instruction_tree->instruction_if_true, variableRegister);
         }
             break;
 
@@ -41,9 +45,9 @@ void run_program(instruction_tree_t instruction_root, instruction_tree_t instruc
                                                        act_instruction->line_number, instruction_root);
 
             if (is_condition_true)
-                run_program(instruction_root, act_instruction->instruction_if_true, variableRegister);
+                run_subprogram(instruction_root, act_instruction->instruction_if_true, variableRegister);
             else
-                run_program(instruction_root, act_instruction->instruction_if_false, variableRegister);
+                run_subprogram(instruction_root, act_instruction->instruction_if_false, variableRegister);
         }
             break;
 
@@ -51,7 +55,7 @@ void run_program(instruction_tree_t instruction_root, instruction_tree_t instruc
             bool is_condition_true = calculate_ONP_val(act_instruction->ONP_expression, variableRegister,
                                                        act_instruction->line_number, instruction_root);
             while (is_condition_true) {
-                run_program(instruction_root, act_instruction->instruction_if_true, variableRegister);
+                run_subprogram(instruction_root, act_instruction->instruction_if_true, variableRegister);
 
                 is_condition_true = calculate_ONP_val(act_instruction->ONP_expression, variableRegister,
                                                       act_instruction->line_number, instruction_root);
@@ -77,5 +81,5 @@ void run_program(instruction_tree_t instruction_root, instruction_tree_t instruc
         }
     }
 
-    run_program(instruction_root, instruction_tree->next_instruction, variableRegister);
+    run_subprogram(instruction_root, instruction_tree->next_instruction, variableRegister);
 }
