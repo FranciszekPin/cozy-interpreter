@@ -10,9 +10,8 @@
 int main(int argc, char **argv) {
     //run_tests();
     if (argc == 1) {
-        printf("No file name provided\n");
-    }
-    else if (argc == 2) {
+        throw_error(NO_FILE_PROVIDED, -1, NULL, NULL);
+    } else if (argc == 2) {
         source_code_t source_code;
         create_source_code_reader(&source_code);
         load_source_code(argv[1], &source_code);
@@ -26,9 +25,8 @@ int main(int argc, char **argv) {
 
         remove_variable_register(variable_register);
         remove_instruction_tree(instruction_tree);
-    }
-    else {
-        printf("Too many arguments\n");
+    } else {
+        throw_error(TOO_MANY_ARGUMENTS, -1, NULL, NULL);
     }
 
     return 0;

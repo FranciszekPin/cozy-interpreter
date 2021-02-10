@@ -5,7 +5,10 @@
 
 void throw_error(error_t error_type, int line_number, instruction_tree_t instruction_tree,
                  variable_register_t variable_register) {
-    printf("Error in line %d: ", line_number);
+    if (line_number == -1)
+        printf("Error: ");
+    else
+        printf("Error in line %d: ", line_number);
     switch (error_type) {
         case EMPTY_FILE:
             printf("file is empty\n");
@@ -51,6 +54,12 @@ void throw_error(error_t error_type, int line_number, instruction_tree_t instruc
             break;
         case TOO_LONG_LINE:
             printf("max line length is %d characters\n", CHARACTER_LIMIT);
+            break;
+        case NO_FILE_PROVIDED:
+            printf("no source file to interpret\n");
+            break;
+        case TOO_MANY_ARGUMENTS:
+            printf("too many arguments provided\n");
             break;
 
         default: {
