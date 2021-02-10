@@ -7,7 +7,7 @@ int get_letter_code(char letter) {
     return letter - 'a';
 }
 
-node_t *create() {
+node_t *create_variable_register() {
     node_t *new_node = malloc(sizeof(node_t));
     for (int i = 0; i < NUMBER_OF_LETTERS; i++) {
         new_node->next_node[i] = NULL;
@@ -49,7 +49,7 @@ variable_register_t define_variable(variable_register_t variable_register, char 
         }
 
         if (act_node->next_node[letter_code] == NULL) {
-            act_node->next_node[letter_code] = create();
+            act_node->next_node[letter_code] = create_variable_register();
         }
 
         act_node = act_node->next_node[letter_code];

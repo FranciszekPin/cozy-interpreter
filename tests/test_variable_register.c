@@ -3,7 +3,7 @@
 #include "tester_kit.h"
 
 void test_variable_register() {
-    variable_register_t variable_register = create();
+    variable_register_t variable_register = create_variable_register();
 
     char xyz[] = "xyz";
     char xyx[] = "xyx";

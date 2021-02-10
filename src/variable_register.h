@@ -24,7 +24,7 @@ typedef node_t * variable_register_t;
 
 int get_letter_code(char letter);
 
-node_t * create();
+node_t * create_variable_register();
 
 bool is_letter_code_proper_for_variable_name(int letter_code);
 

@@ -6,7 +6,7 @@ void test_program_runner() {
     create_source_code_reader(&source_code);
     load_source_code("tests/test_program_runner.coz", &source_code);
 
-    variable_register_t variableRegister = create();
+    variable_register_t variableRegister = create_variable_register();
 
     instruction_tree_t instruction_tree = NULL;
     load_defined_variables(&source_code, variableRegister, instruction_tree);

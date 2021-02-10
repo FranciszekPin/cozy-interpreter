@@ -23,6 +23,10 @@ type_of_instruction_t detect_type_of_instruction(char *word) {
     return typeOfInstruction;
 }
 
+instruction_tree_t create_instruction_tree() {
+    return NULL;
+}
+
 instruction_tree_t create_instruction(type_of_instruction_t type_of_instruction, instruction_tree_t upper_instruction, char *ONP_expression, int line_number) {
     instruction_t * new_instruction = malloc(sizeof (instruction_t));
     new_instruction->type_of_instruction = type_of_instruction;

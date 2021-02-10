@@ -11,7 +11,7 @@ void test_parser() {
     create_source_code_reader(&source_code);
     load_source_code("tests/test_parser.coz", &source_code);
 
-    variable_register_t variableRegister = create();
+    variable_register_t variableRegister = create_variable_register();
 
     load_defined_variables(&source_code, variableRegister, NULL);
 
