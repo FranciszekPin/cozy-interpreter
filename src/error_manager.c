@@ -61,6 +61,9 @@ void throw_error(error_t error_type, int line_number, instruction_tree_t instruc
         case TOO_MANY_ARGUMENTS:
             printf("too many arguments provided\n");
             break;
+        case FILE_DOES_NOT_EXIST:
+            printf("File with given name doesn't exist.\n");
+            break;
 
         default: {
             printf("unknown error is thrown\n");

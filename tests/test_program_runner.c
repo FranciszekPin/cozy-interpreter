@@ -4,7 +4,7 @@
 void test_program_runner() {
     source_code_t source_code;
     create_source_code_reader(&source_code);
-    load_source_code("tests/test_program_runner.coz", &source_code);
+    load_source_code(&source_code, "tests/test_program_runner.coz");
 
     variable_register_t variableRegister = create_variable_register();
 
