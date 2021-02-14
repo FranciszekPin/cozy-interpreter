@@ -2,66 +2,81 @@
 #include "parser.h"
 
 
+bool are_remain_characters(char *line) {
+    return (*line != '\n' && *line != '\0');
+}
+
+bool is_define_clause(line_str_t word) {
+    return equal(word, "define:");
+}
+
+bool is_program_clause(line_str_t word) {
+    return equal(word, "program:");
+}
+
+char *read_first_word_skipping_empty_lines(instruction_tree_t instruction_tree, variable_register_t variable_register,
+                                           source_code_t *source_code, line_str_t word) {
+    skip_empty_lines(source_code, instruction_tree, variable_register);
+    char *result = read_first_word_after_whitespace(get_act_code_line(source_code, instruction_tree, variable_register),
+                                                    word);
+    return result;
+}
+
 void load_defined_variables(source_code_t *source_code, variable_register_t variable_register,
                             instruction_tree_t instruction_tree) {
+    line_str_t word;
+    char *act_line = NULL;
     if (are_lines_to_read(source_code))
-        skip_empty_lines(source_code, instruction_tree, variable_register);
+        act_line = read_first_word_skipping_empty_lines(instruction_tree, variable_register, source_code, word);
 
     if (!are_lines_to_read(source_code)) {
         throw_error(EMPTY_FILE, get_act_line_number(source_code) + 1, instruction_tree, variable_register);
     }
 
-    char *act_line = get_code_line(source_code, instruction_tree, variable_register);
-    char word[LINE_LENGTH];
-    act_line = read_first_word_after_whitespace(act_line, word);
-
-    if (!equal(word, "define:")) {
-        if (!equal(word, "program:"))
+    if (!is_define_clause(word)) {
+        if (!is_program_clause(word))
             throw_error(NO_PROGRAM_CLAUSE, get_act_line_number(source_code) + 1, instruction_tree, variable_register);
-        move_to_next_line(source_code);
-        return;
-    }
+        go_to_next_line(source_code);
 
-    if (*act_line != '\n' && *act_line != '\0') {
-        throw_error(NO_NEW_LINE_AFTER_CLAUSE, get_act_line_number(source_code) + 1, instruction_tree,
-                    variable_register);
-    }
-
-    move_to_next_line(source_code);
-    if (are_lines_to_read(source_code)) {
-        skip_empty_lines(source_code, instruction_tree, variable_register);
-        read_first_word_after_whitespace(get_code_line(source_code, instruction_tree, variable_register), word);
-    }
-
-    while (are_lines_to_read(source_code) && !equal("program:", word)) {
-        load_variable(source_code, variable_register, instruction_tree);
-
-        move_to_next_line(source_code);
-
-        if (are_lines_to_read(source_code)) {
-            skip_empty_lines(source_code, instruction_tree, variable_register);
-            read_first_word_after_whitespace(get_code_line(source_code, instruction_tree, variable_register), word);
-        }
-    }
-
-    if (are_lines_to_read(source_code)) {
-        act_line = read_first_word_after_whitespace(get_code_line(source_code, instruction_tree, variable_register),
-                                                    word);
-        if (equal("program:", word) && *act_line != '\n' && *act_line != '\0') {
+    } else {
+        if (are_remain_characters(act_line)) {
             throw_error(NO_NEW_LINE_AFTER_CLAUSE, get_act_line_number(source_code) + 1, instruction_tree,
                         variable_register);
+        }
+
+        go_to_next_line(source_code);
+        if (are_lines_to_read(source_code)) {
+            read_first_word_skipping_empty_lines(instruction_tree, variable_register, source_code, word);
+        }
+
+        while (are_lines_to_read(source_code) && !is_program_clause(word)) {
+            load_variable(source_code, variable_register, instruction_tree);
+
+            go_to_next_line(source_code);
+
+            if (are_lines_to_read(source_code)) {
+                read_first_word_skipping_empty_lines(instruction_tree, variable_register, source_code, word);
+            }
+        }
+
+        if (are_lines_to_read(source_code)) {
+            act_line = read_first_word_after_whitespace(
+                    get_act_code_line(source_code, instruction_tree, variable_register), word);
+            if (is_program_clause(word) && are_remain_characters(act_line))
+                throw_error(NO_NEW_LINE_AFTER_CLAUSE, get_act_line_number(source_code) + 1, instruction_tree,
+                            variable_register);
 
         }
-    }
 
-    move_to_next_line(source_code);
-    if (are_lines_to_read(source_code))
-        skip_empty_lines(source_code, instruction_tree, variable_register);
+        go_to_next_line(source_code);
+        if (are_lines_to_read(source_code))
+            skip_empty_lines(source_code, instruction_tree, variable_register);
+    }
 }
 
 void
 load_variable(source_code_t *source_code, variable_register_t variable_register, instruction_tree_t instruction_tree) {
-    char *act_line = get_code_line(source_code, instruction_tree, variable_register);
+    char *act_line = get_act_code_line(source_code, instruction_tree, variable_register);
     char word[LINE_LENGTH];
     act_line = read_first_word_after_whitespace(act_line, word);
     variable_type_t variable_type = detect_variable_type(word);

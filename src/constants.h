@@ -7,4 +7,6 @@
 #define NUMBER_OF_LETTERS 26
 #define CHARACTER_LIMIT 90
 
+typedef int line_str_t[LINE_LENGTH];
+
 #endif //COZY_INTERPRETER_CONSTANTS_H

@@ -14,7 +14,7 @@ int main(int argc, char **argv) {
     } else if (argc == 2) {
         source_code_t source_code;
         create_source_code_reader(&source_code);
-        load_source_code(argv[1], &source_code);
+        load_source_code(&source_code, argv[1]);
 
         variable_register_t variable_register = create_variable_register();
         instruction_tree_t instruction_tree = create_instruction_tree();
