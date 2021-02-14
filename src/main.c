@@ -1,14 +1,11 @@
-#include <stdio.h>
-#include <stdlib.h>
 #include "source_code_reader.h"
 #include "variable_register.h"
 #include "instruction.h"
-
 #include "program_runner.h"
-#include "../tests/run_tests.h"
+
 
 int main(int argc, char **argv) {
-    //run_tests();
+
     if (argc == 1) {
         throw_error(NO_FILE_PROVIDED, -1, NULL, NULL);
     } else if (argc == 2) {

@@ -116,8 +116,8 @@ parse_program(source_code_t *source_code, instruction_tree_t instruction_tree, v
     if (are_lines_to_read(source_code))
         skip_empty_lines(source_code, instruction_tree, variable_register);
     while (are_lines_to_read(source_code)) {
-        char word[LINE_LENGTH];
-        line = get_code_line(source_code, instruction_tree, variable_register);
+        line_str_t word;
+        line = get_act_code_line(source_code, instruction_tree, variable_register);
         line = read_first_word_after_whitespace(line, word);
         upper_instruction->instruction_if_true;
         type_of_instruction_t type_of_instruction = detect_type_of_instruction(word);
@@ -131,7 +131,7 @@ parse_program(source_code_t *source_code, instruction_tree_t instruction_tree, v
                     throw_error(WRONG_ASSIGNMENT_EXPRESSION, get_act_line_number(source_code) + 1, instruction_tree,
                                 variable_register);
                 }
-                char ONP[LINE_LENGTH];
+                line_str_t ONP;
                 expression_to_ONP(line, ONP, get_act_line_number(source_code) + 1, instruction_tree, variable_register);
                 instruction_tree_t instruction = create_instruction_assignment(ASSIGN, upper_instruction, variable_name,
                                                                                ONP,
@@ -141,7 +141,7 @@ parse_program(source_code_t *source_code, instruction_tree_t instruction_tree, v
             }
                 break;
             case IF: {
-                char ONP[LINE_LENGTH];
+                line_str_t ONP;
                 expression_to_ONP(line, ONP, get_act_line_number(source_code) + 1, instruction_tree, variable_register);
                 instruction_tree_t instruction = create_instruction(IF, upper_instruction, ONP,
                                                                     get_act_line_number(source_code) + 1);
@@ -178,7 +178,7 @@ parse_program(source_code_t *source_code, instruction_tree_t instruction_tree, v
                 break;
 
             case WHILE: {
-                char ONP[LINE_LENGTH];
+                line_str_t ONP;
                 expression_to_ONP(line, ONP, get_act_line_number(source_code) + 1, instruction_tree, variable_register);
                 instruction_tree_t instruction = create_instruction(WHILE, upper_instruction, ONP,
                                                                     get_act_line_number(source_code) + 1);
@@ -189,7 +189,7 @@ parse_program(source_code_t *source_code, instruction_tree_t instruction_tree, v
                 break;
 
             case PRINT_VARIABLE: {
-                char ONP[LINE_LENGTH];
+                line_str_t ONP;
                 expression_to_ONP(line, ONP, get_act_line_number(source_code) + 1, instruction_tree, variable_register);
                 instruction_tree_t instruction = create_instruction(type_of_instruction, upper_instruction, ONP,
                                                                     get_act_line_number(source_code) + 1);
@@ -202,11 +202,11 @@ parse_program(source_code_t *source_code, instruction_tree_t instruction_tree, v
                                                                     get_act_line_number(source_code) + 1);
                 add_with_respect_if(upper_instruction, instruction, upper_instruction->in_instruction_if_true);
             }
-            break;
+                break;
 
 
             case READ: {
-                char ONP[LINE_LENGTH];
+                line_str_t ONP;
                 expression_to_ONP(line, ONP, get_act_line_number(source_code) + 1, instruction_tree, variable_register);
                 instruction_tree_t instruction = create_instruction(READ, upper_instruction, ONP,
                                                                     get_act_line_number(source_code) + 1);
@@ -219,7 +219,7 @@ parse_program(source_code_t *source_code, instruction_tree_t instruction_tree, v
             }
         }
 
-        move_to_next_line(source_code);
+        go_to_next_line(source_code);
         if (are_lines_to_read(source_code))
             skip_empty_lines(source_code, instruction_tree, variable_register);
     }
